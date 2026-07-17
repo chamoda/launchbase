@@ -29,11 +29,17 @@ jobs:
         with:
           node-version-file: platform/.nvmrc
           cache: npm
-          cache-dependency-path: platform/package-lock.json
+          cache-dependency-path: |
+            platform/package-lock.json
+            site/package-lock.json
 
       - name: Install platform dependencies
         run: npm ci
         working-directory: platform
+
+      - name: Install site dependencies
+        run: npm ci
+        working-directory: site
 
       - name: Run pre-commit
         run: uv run --project api pre-commit run --all-files
