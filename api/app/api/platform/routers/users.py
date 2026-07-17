@@ -8,6 +8,6 @@ from app.api.platform.schemas import UserResponse
 router = APIRouter()
 
 
-@router.get("/users/me")
+@router.get("/users/me", tags=["users"])
 async def get_current_user(current_user: CurrentUser) -> UserResponse:
     return UserResponse.model_validate(current_user)

@@ -16,7 +16,7 @@ from app.security import generate_jwt_token, verify_password
 router = APIRouter()
 
 
-@router.get("/health")
+@router.get("/health", tags=["meta"])
 async def health(session: DBSession, response: Response) -> HealthCheckResponse:
     try:
         # Check database connectivity
@@ -30,7 +30,7 @@ async def health(session: DBSession, response: Response) -> HealthCheckResponse:
         return HealthCheckResponse(status="unhealthy")
 
 
-@router.post("/auth")
+@router.post("/auth", tags=["auth"])
 async def auth(
     auth_request: AuthRequest, session: DBSession, response: Response
 ) -> AuthResponse:
@@ -60,7 +60,7 @@ async def auth(
     )
 
 
-@router.post("/logout")
+@router.post("/logout", tags=["auth"])
 async def logout(response: Response) -> MessageResponse:
     response.delete_cookie("access_token")
     return MessageResponse(message="Successfully logged out")

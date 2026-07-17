@@ -8,10 +8,12 @@ function subscribe(callback: () => void) {
   return () => mql.removeEventListener("change", callback);
 }
 
+function getSnapshot() {
+  return window.innerWidth < MOBILE_BREAKPOINT;
+}
+
 export function useIsMobile() {
-  return React.useSyncExternalStore(
-    subscribe,
-    () => window.innerWidth < MOBILE_BREAKPOINT,
-    () => false
-  );
+  // useSyncExternalStore keeps this SSR/static-export safe and avoids calling
+  // setState inside an effect.
+  return React.useSyncExternalStore(subscribe, getSnapshot, () => false);
 }

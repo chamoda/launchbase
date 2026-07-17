@@ -1,0 +1,60 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-toml
+      - id: check-yaml
+        args:
+          - --unsafe
+      - id: check-json
+      - id: check-merge-conflict
+      - id: detect-private-key
+      - id: trailing-whitespace
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.14
+    hooks:
+      - id: ruff-check
+        name: ruff check (api)
+        args:
+          - --fix
+        files: ^api/
+      - id: ruff-format
+        name: ruff format (api)
+        files: ^api/
+  - repo: local
+    hooks:
+      - id: pyright
+        name: pyright (api)
+        language: system
+        files: ^api/
+        entry: bash -c 'cd api && uv run pyright'
+        pass_filenames: false
+      - id: requirements
+        name: export requirements (api)
+        language: system
+        files: ^api/uv\.lock$
+        pass_filenames: false
+        entry: bash -c 'cd api && uv export --no-dev --no-hashes -o requirements.txt'
+      - id: requirements-test
+        name: export requirements-test (api)
+        language: system
+        files: ^api/uv\.lock$
+        pass_filenames: false
+        entry: bash -c 'cd api && uv export --no-hashes -o requirements-test.txt'
+      - id: prettier-platform
+        name: prettier (platform)
+        language: system
+        files: ^platform/.*\.(js|jsx|ts|tsx|json|md|yaml|yml|css|scss|sass)$
+        entry: bash -c 'cd platform && npx prettier --write --ignore-unknown "${@#platform/}"' --
+      - id: eslint-platform
+        name: eslint (platform)
+        language: system
+        files: ^platform/.*\.(js|jsx|ts|tsx)$
+        entry: bash -c 'cd platform && npx eslint --fix --no-warn-ignored "${@#platform/}"' --
+      - id: type-check-platform
+        name: type-check (platform)
+        language: system
+        files: ^platform/.*\.(ts|tsx)$
+        pass_filenames: false
+        entry: bash -c 'cd platform && npx tsc --noEmit'

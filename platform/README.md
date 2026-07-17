@@ -1,6 +1,7 @@
-![Banner](banner.png)
+# Launchbase Platform
 
-This is a [Next.js](https://nextjs.org) project template with special focus on SSG first rendering.
+The Launchbase frontend — a [Next.js](https://nextjs.org) app with a special
+focus on SSG-first rendering.
 
 ## Architecture
 
@@ -19,25 +20,60 @@ The project is configured with SSG-first rendering, meaning pages are generated 
 
 **Requires Node.js 24+** (current Active LTS). Use `nvm use` to pick up the version from `.nvmrc`.
 
-First, run the development server:
+First, copy the env file and run the development server:
 
 ```bash
+cp .env.example .env.local                # then edit values
 npm run dev
+```
+
+## API SDK
+
+The typed API client in `src/api/` is generated with
+[orval](https://orval.dev) from the FastAPI OpenAPI spec:
+
+- `src/api/endpoints/` — TanStack Query hooks (split per OpenAPI tag), calling
+  the shared fetch client in `src/lib/api-client.ts`
+- `src/api/model/` — TypeScript models
+- `src/api/zod/` — standalone zod schemas for request/response/params,
+  composable with react-hook-form via `@hookform/resolvers`
+
+Regenerate after changing the API (requires the API dev server running at
+`http://localhost:8000`):
+
+```bash
+npm run generate
+```
+
+Generated files are committed; don't edit them by hand.
+
+### Forms
+
+Forms use [react-hook-form](https://react-hook-form.com) with `zodResolver`.
+Extend the generated zod schema with UI-facing validation messages while
+staying anchored to the API contract:
+
+```tsx
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AuthBody } from "@/api/zod/auth/auth.zod";
+
+const loginSchema = AuthBody.extend({
+  email: z.string().email("Invalid email address"),
+});
+
+const form = useForm<z.infer<typeof loginSchema>>({
+  resolver: zodResolver(loginSchema),
+});
 ```
 
 ## Code Quality
 
-This project enforces code quality standards automatically using Git hooks and lint-staged:
-
-### Pre-commit Hooks
-
-The project uses [Husky](https://typicode.github.io/husky/) and [lint-staged](https://github.com/lint-staged/lint-staged) to run quality checks on staged files before each commit:
-
-- **Prettier**: Automatically formats all staged files
-- **ESLint**: Lints and fixes JavaScript/TypeScript files
-- **Next.js lint**: Runs Next.js-specific linting rules
-
-Configuration is defined in `.lintstagedrc.mjs` using ES module syntax.
+Git hooks for the whole monorepo are managed by
+[pre-commit](https://pre-commit.com) at the repo root — prettier, ESLint, and
+`tsc` run automatically on staged `platform/` files before each commit. See the
+[root README](../README.md#git-hooks) for setup.
 
 ### Manual Commands
 
@@ -59,7 +95,7 @@ npm run type-check
 
 ### TypeScript Strict Mode
 
-This project uses **maximum strictness** TypeScript configuration for enhanced type safety:
+This project uses **maximum strictness** TypeScript configuration for enhanced type safety.
 
 ## Production
 

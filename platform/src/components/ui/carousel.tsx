@@ -58,31 +58,16 @@ function Carousel({
     },
     plugins
   );
-  const subscribe = React.useCallback(
-    (callback: () => void) => {
-      if (!api) {
-        return () => {};
-      }
-      api.on("reInit", callback);
-      api.on("select", callback);
-      return () => {
-        api.off("reInit", callback);
-        api.off("select", callback);
-      };
-    },
-    [api]
-  );
+  const [canScrollPrev, setCanScrollPrev] = React.useState(false);
+  const [canScrollNext, setCanScrollNext] = React.useState(false);
 
-  const canScrollPrev = React.useSyncExternalStore(
-    subscribe,
-    () => api?.canScrollPrev() ?? false,
-    () => false
-  );
-  const canScrollNext = React.useSyncExternalStore(
-    subscribe,
-    () => api?.canScrollNext() ?? false,
-    () => false
-  );
+  const onSelect = React.useCallback((api: CarouselApi) => {
+    if (!api) {
+      return;
+    }
+    setCanScrollPrev(api.canScrollPrev());
+    setCanScrollNext(api.canScrollNext());
+  }, []);
 
   const scrollPrev = React.useCallback(() => {
     api?.scrollPrev();
@@ -111,6 +96,21 @@ function Carousel({
     }
     setApi(api);
   }, [api, setApi]);
+
+  React.useEffect(() => {
+    if (!api) {
+      return;
+    }
+    // onSelect syncs scroll state from the embla event source.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    onSelect(api);
+    api.on("reInit", onSelect);
+    api.on("select", onSelect);
+
+    return () => {
+      api?.off("select", onSelect);
+    };
+  }, [api, onSelect]);
 
   return (
     <CarouselContext.Provider

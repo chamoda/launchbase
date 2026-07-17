@@ -197,16 +197,14 @@ function CalendarDayButton({
   const defaultClassNames = getDefaultClassNames();
 
   const ref = React.useRef<HTMLButtonElement>(null);
-  const isFocused = modifiers["focused"];
   React.useEffect(() => {
-    if (isFocused) {
+    if (modifiers["focused"]) {
       ref.current?.focus();
     }
-  }, [isFocused]);
+  }, [modifiers]);
 
   return (
     <Button
-      ref={ref}
       variant="ghost"
       size="icon"
       data-day={day.date.toLocaleDateString(locale?.code)}

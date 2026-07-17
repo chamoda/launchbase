@@ -1,8 +1,6 @@
-![fastapi-template banner](banner.png)
+# Launchbase API
 
-# fastapi-template
-
-A SaaS-shaped Python starter kit built on FastAPI. Opinionated defaults so you can skip the wiring and start building.
+The Launchbase backend — a SaaS-shaped Python service built on FastAPI.
 
 ## What's in the box
 
@@ -13,7 +11,7 @@ A SaaS-shaped Python starter kit built on FastAPI. Opinionated defaults so you c
 - **Pagination** via `fastapi-pagination`
 - **Custom CLI** — `manage.py` powered by Typer
 - **Tests** — `pytest`, `pytest-asyncio`, real Postgres in CI via `testcontainers`
-- **Tooling** — `uv` for env & deps, `ruff` + `pyright` + `pre-commit`, GitHub Actions for CI
+- **Tooling** — `uv` for env & deps, `ruff` + `pyright` (via the repo-root `pre-commit`), GitHub Actions for CI
 
 ## Requirements
 
@@ -25,15 +23,18 @@ A SaaS-shaped Python starter kit built on FastAPI. Opinionated defaults so you c
 
 Instructions assume Ubuntu 24.04.
 
+From the repo root:
+
 ```bash
-git clone <repo-url> && cd fastapi-template
+cd api
 uv sync                                  # create venv + install deps (incl. dev group)
 cp .env.example .env                     # then edit values
-createdb fastapi_template                # or use psql / pgAdmin
+createdb launchbase                      # or use psql / pgAdmin
 uv run alembic upgrade head              # apply migrations
-uv run pre-commit install                # set up git hooks
 uv run fastapi dev                       # http://localhost:8000
 ```
+
+Git hooks are managed at the repo root — see the [root README](../README.md#git-hooks).
 
 Platform API docs: <http://localhost:8000/platform/docs>
 
@@ -62,6 +63,7 @@ uv run python manage.py --help
 ```
 
 ### Lint & type-check
+From the repo root:
 ```bash
-uv run pre-commit run --all-files
+uv run --project api pre-commit run --all-files
 ```

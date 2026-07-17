@@ -1,0 +1,19 @@
+session_name: launchbase
+start_directory: ./
+windows:
+  - window_name: launchbase
+    start_directory: ./
+    panes:
+      - blank
+  - window_name: api
+    layout: even-vertical
+    start_directory: ./api
+    panes:
+      - make run
+      - blank
+  - window_name: platform
+    layout: even-vertical
+    start_directory: ./platform
+    panes:
+      - npm run dev -- --port 3000
+      - blank

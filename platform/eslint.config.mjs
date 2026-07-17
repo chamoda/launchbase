@@ -14,6 +14,7 @@ const compat = new FlatCompat({
 const eslintConfig = [
   {
     ignores: [
+      "src/api/**",
       ".next/**",
       "out/**",
       "build/**",
