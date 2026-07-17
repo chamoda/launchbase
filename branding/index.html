@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Launchbase — Brand</title>
+  <style>
+    :root {
+      --ink: #0A0A0A;
+      --paper: #FAFAFA;
+      --surface: #FFFFFF;
+      --muted: #737373;
+      --border: #E5E5E5;
+      --dark-surface: #0F0F10;
+      --dark-border: #232326;
+      --font: "Inter", "SF Pro Display", "Segoe UI", system-ui, sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font);
+      background: var(--paper);
+      color: var(--ink);
+      padding: 64px 24px 120px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    main { max-width: 920px; margin: 0 auto; }
+
+    header { margin-bottom: 72px; }
+    h1 { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+    .sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+    h2 {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      margin: 64px 0 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .note { font-size: 13px; color: var(--muted); line-height: 1.6; max-width: 60ch; margin-top: 14px; }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 56px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+      color: var(--ink);           /* marks inherit via currentColor */
+    }
+    .card.dark {
+      background: var(--dark-surface);
+      border-color: var(--dark-border);
+      color: var(--paper);
+    }
+
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 680px) { .grid { grid-template-columns: 1fr; } }
+
+    svg { display: block; }
+
+    .sizes { align-items: flex-end; gap: 40px; }
+    .size-item { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+    .size-item span { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+    .cand-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    @media (max-width: 680px) { .cand-grid { grid-template-columns: 1fr 1fr; } }
+    .cand {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 36px 20px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      color: var(--ink);
+    }
+    .cand .label { text-align: center; }
+    .cand .label b { display: block; font-size: 12px; font-weight: 600; }
+    .cand .label small { display: block; font-size: 11px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
+
+    .swatches { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+    .swatch { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: var(--surface); }
+    .swatch .chip { height: 64px; }
+    .swatch .meta { padding: 10px 12px; display: flex; justify-content: space-between; align-items: baseline; }
+    .swatch .name { font-size: 12px; font-weight: 600; }
+    .swatch .hex { font-size: 11px; color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Launchbase</h1>
+      <p class="sub">Identity system · v1.0 · sources: <code>logomark.svg</code>, <code>wordmark.svg</code>, <code>favicon.svg</code></p>
+    </header>
+
+    <!-- Inline copies of the marks so they theme via currentColor.
+         Canonical geometry lives in logomark.svg / wordmark.svg. -->
+
+    <h2>Logomark</h2>
+    <div class="grid">
+      <div class="card">
+        <svg viewBox="0 0 64 64" width="96" height="96" style="--bar:#FF4F1F" aria-label="Launchbase logomark">
+          <g fill="currentColor">
+            <path d="M12 35 A20 20 0 0 1 52 35 Z"/>
+            <rect x="12" y="43" width="40" height="7" rx="3.5" fill="var(--bar, currentColor)"/>
+          </g>
+        </svg>
+      </div>
+      <div class="card dark">
+        <svg viewBox="0 0 64 64" width="96" height="96" style="--bar:#FF6A3D" aria-label="Launchbase logomark, inverted">
+          <g fill="currentColor">
+            <path d="M12 35 A20 20 0 0 1 52 35 Z"/>
+            <rect x="12" y="43" width="40" height="7" rx="3.5" fill="var(--bar, currentColor)"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+    <p class="note">
+      A dome hovering over its detached pad — the moment of lift-off, and a
+      rising sun. The dome stays ink; the pad carries the single brand accent,
+      Flame. In one-color contexts (favicons, embossing, engraving) the whole
+      mark falls back to solid ink.
+    </p>
+
+    <h2>Wordmark</h2>
+    <div class="grid">
+      <div class="card">
+        <svg viewBox="0 0 300 64" width="300" height="64" style="--bar:#FF4F1F" aria-label="Launchbase wordmark">
+          <text x="0" y="46" font-family="Inter, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif"
+                font-size="48" font-weight="600" letter-spacing="-0.8"
+                fill="currentColor">Launch<tspan fill="var(--bar, currentColor)">base</tspan></text>
+        </svg>
+      </div>
+      <div class="card dark">
+        <svg viewBox="0 0 300 64" width="300" height="64" style="--bar:#FF6A3D" aria-label="Launchbase wordmark, inverted">
+          <text x="0" y="46" font-family="Inter, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif"
+                font-size="48" font-weight="600" letter-spacing="-0.8"
+                fill="currentColor">Launch<tspan fill="var(--bar, currentColor)">base</tspan></text>
+        </svg>
+      </div>
+    </div>
+    <p class="note">
+      Title case, semibold, gently tightened — quiet confidence over decoration.
+      Currently set live in the type stack; outline to paths once the final
+      typeface is licensed.
+    </p>
+
+    <h2>Lockup</h2>
+    <!-- Single-SVG lockup: mark and text share one coordinate system, so the
+         gap is exact — mark content is shifted to x=0 and vertically centered
+         on the text's cap band (y 12..46); text starts at x=57, giving a
+         visual gap of 17u ≈ half the cap height. -->
+    <div class="grid">
+      <div class="card" style="--bar:#FF4F1F">
+        <svg viewBox="0 0 340 64" width="272" height="51" overflow="visible" aria-label="Launchbase">
+          <g fill="currentColor" transform="translate(-12 -3.5)">
+            <path d="M12 35 A20 20 0 0 1 52 35 Z"/>
+            <rect x="12" y="43" width="40" height="7" rx="3.5" fill="var(--bar, currentColor)"/>
+          </g>
+          <text x="57" y="46" font-family="Inter, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif"
+                font-size="48" font-weight="600" letter-spacing="-0.8"
+                fill="currentColor">Launch<tspan fill="var(--bar, currentColor)">base</tspan></text>
+        </svg>
+      </div>
+      <div class="card dark" style="--bar:#FF6A3D">
+        <svg viewBox="0 0 340 64" width="272" height="51" overflow="visible" aria-label="Launchbase">
+          <g fill="currentColor" transform="translate(-12 -3.5)">
+            <path d="M12 35 A20 20 0 0 1 52 35 Z"/>
+            <rect x="12" y="43" width="40" height="7" rx="3.5" fill="var(--bar, currentColor)"/>
+          </g>
+          <text x="57" y="46" font-family="Inter, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif"
+                font-size="48" font-weight="600" letter-spacing="-0.8"
+                fill="currentColor">Launch<tspan fill="var(--bar, currentColor)">base</tspan></text>
+        </svg>
+      </div>
+    </div>
+
+    <h2>Accent — Launch<em>base</em></h2>
+    <div class="cand-grid">
+      <div class="cand">
+        <svg viewBox="0 0 340 64" width="240" height="45" overflow="visible" style="--bar:#737373" aria-label="Launchbase, slate accent">
+          <g fill="currentColor" transform="translate(-12 -3.5)">
+            <path d="M12 35 A20 20 0 0 1 52 35 Z"/>
+            <rect x="12" y="43" width="40" height="7" rx="3.5" fill="var(--bar, currentColor)"/>
+          </g>
+          <text x="57" y="46" font-family="Inter, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif"
+                font-size="48" font-weight="600" letter-spacing="-0.8"
+                fill="currentColor">Launch<tspan fill="#737373">base</tspan></text>
+        </svg>
+        <div class="label"><b>Slate</b><small>#737373 — tonal, the quietest option.</small></div>
+      </div>
+      <div class="cand">
+        <svg viewBox="0 0 340 64" width="240" height="45" overflow="visible" style="--bar:#FF4F1F" aria-label="Launchbase, flame accent">
+          <g fill="currentColor" transform="translate(-12 -3.5)">
+            <path d="M12 35 A20 20 0 0 1 52 35 Z"/>
+            <rect x="12" y="43" width="40" height="7" rx="3.5" fill="var(--bar, currentColor)"/>
+          </g>
+          <text x="57" y="46" font-family="Inter, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif"
+                font-size="48" font-weight="600" letter-spacing="-0.8"
+                fill="currentColor">Launch<tspan fill="#FF4F1F">base</tspan></text>
+        </svg>
+        <div class="label"><b>Flame</b><small>#FF4F1F — launch energy, warm and loud.</small></div>
+      </div>
+      <div class="cand dark" style="background: var(--dark-surface); border-color: var(--dark-border); color: var(--paper);">
+        <svg viewBox="0 0 340 64" width="240" height="45" overflow="visible" style="--bar:#FF6A3D" aria-label="Launchbase on dark, flame accent">
+          <g fill="currentColor" transform="translate(-12 -3.5)">
+            <path d="M12 35 A20 20 0 0 1 52 35 Z"/>
+            <rect x="12" y="43" width="40" height="7" rx="3.5" fill="var(--bar, currentColor)"/>
+          </g>
+          <text x="57" y="46" font-family="Inter, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif"
+                font-size="48" font-weight="600" letter-spacing="-0.8"
+                fill="currentColor">Launch<tspan fill="#FF6A3D">base</tspan></text>
+        </svg>
+        <div class="label"><b>Flame · dark</b><small>#FF6A3D — the accent lifted one step for dark.</small></div>
+      </div>
+    </div>
+    <p class="note">
+      The accent applies to exactly two elements: the pad bar and the
+      &ldquo;base&rdquo; syllable. <b>Flame is the brand accent</b> (lifted one
+      step on dark); Slate is the quiet fallback for formal contexts
+      (documents, invoices, legal).
+    </p>
+
+    <h2>Scale</h2>
+    <div class="card sizes" style="--bar:#FF4F1F">
+      <div class="size-item">
+        <svg viewBox="0 0 64 64" width="128" height="128" aria-hidden="true"><g fill="currentColor"><path d="M12 35 A20 20 0 0 1 52 35 Z"/><rect x="12" y="43" width="40" height="7" rx="3.5" fill="var(--bar, currentColor)"/></g></svg>
+        <span>128</span>
+      </div>
+      <div class="size-item">
+        <svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true"><g fill="currentColor"><path d="M12 35 A20 20 0 0 1 52 35 Z"/><rect x="12" y="43" width="40" height="7" rx="3.5" fill="var(--bar, currentColor)"/></g></svg>
+        <span>64</span>
+      </div>
+      <div class="size-item">
+        <svg viewBox="0 0 64 64" width="32" height="32" aria-hidden="true"><g fill="currentColor"><path d="M12 35 A20 20 0 0 1 52 35 Z"/><rect x="12" y="43" width="40" height="7" rx="3.5" fill="var(--bar, currentColor)"/></g></svg>
+        <span>32</span>
+      </div>
+      <div class="size-item">
+        <svg viewBox="0 0 64 64" width="16" height="16" aria-hidden="true"><g fill="currentColor"><path d="M12 35 A20 20 0 0 1 52 35 Z"/><rect x="12" y="43" width="40" height="7" rx="3.5" fill="var(--bar, currentColor)"/></g></svg>
+        <span>16</span>
+      </div>
+    </div>
+
+    <h2>Color</h2>
+    <div class="swatches">
+      <div class="swatch">
+        <div class="chip" style="background:#0A0A0A"></div>
+        <div class="meta"><span class="name">Ink</span><span class="hex">#0A0A0A</span></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#FF4F1F"></div>
+        <div class="meta"><span class="name">Flame</span><span class="hex">#FF4F1F</span></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#FF6A3D"></div>
+        <div class="meta"><span class="name">Flame · dark</span><span class="hex">#FF6A3D</span></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#737373"></div>
+        <div class="meta"><span class="name">Slate</span><span class="hex">#737373</span></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#E5E5E5"></div>
+        <div class="meta"><span class="name">Mist</span><span class="hex">#E5E5E5</span></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#FAFAFA; border-bottom:1px solid var(--border)"></div>
+        <div class="meta"><span class="name">Paper</span><span class="hex">#FAFAFA</span></div>
+      </div>
+    </div>
+    <p class="note">
+      Monochrome plus one accent. Flame lives in exactly two places — the pad
+      bar and the &ldquo;base&rdquo; syllable — and steps one shade lighter on
+      dark backgrounds. Everything else stays ink, slate, and paper.
+    </p>
+  </main>
+</body>
+</html>

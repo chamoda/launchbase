@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 64" width="300" height="64" role="img" aria-label="Launchbase wordmark">
+  <!--
+    Launchbase wordmark
+    Title case, semibold, gently tightened. Set live in the brand type stack;
+    outline to paths (fixing the exact typeface) before production use
+    so rendering no longer depends on installed fonts.
+  -->
+  <text x="0" y="46"
+        font-family="Inter, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif"
+        font-size="48" font-weight="600" letter-spacing="-0.8"
+        fill="currentColor">Launch<tspan fill="#FF4F1F">base</tspan></text>
+</svg>
