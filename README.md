@@ -10,6 +10,7 @@ defaults so you can skip the wiring and start building.
 | ----------- | ----------------------------------------------------------------------- |
 | `api/`      | FastAPI backend — async SQLAlchemy, Postgres, Alembic, JWT auth, pytest |
 | `platform/` | Next.js frontend — SSG-first (Jamstack), Tailwind, shadcn/ui            |
+| `admin/`    | Next.js admin console — SSG-first, user management on the API `/admin` surface |
 | `site/`     | Next.js landing page — SSG-first, API-less, full shadcn/ui component set |
 
 Each folder has its own README with setup and workflow details:

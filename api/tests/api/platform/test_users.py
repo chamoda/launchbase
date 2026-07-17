@@ -2,7 +2,7 @@ import pytest
 from faker import Faker
 
 from app.models import User
-from app.security import generate_jwt_token, hash_password
+from app.security import JWT_AUDIENCE_PLATFORM, generate_jwt_token, hash_password
 
 fake = Faker()
 
@@ -31,11 +31,13 @@ async def test_users_me_success(async_client):
         user_id = user.id
 
     # Generate JWT token for authentication
-    access_token = generate_jwt_token({"sub": str(user_id)})
+    access_token = generate_jwt_token(
+        {"sub": str(user_id)}, audience=JWT_AUDIENCE_PLATFORM
+    )
 
     # Test getting user info with authentication
     async_client.cookies.set("access_token", f"Bearer {access_token}")
-    response = await async_client.get("/platform/users/me")
+    response = await async_client.get("/platform/users/self")
 
     assert response.status_code == 200
     data = response.json()
@@ -52,22 +54,22 @@ async def test_users_me_success(async_client):
 @pytest.mark.asyncio
 async def test_users_me_unauthorized(async_client):
     """Test getting current user information without authentication."""
-    response = await async_client.get("/platform/users/me")
+    response = await async_client.get("/platform/users/self")
 
     assert response.status_code == 401
     data = response.json()
-    assert "error" in data
+    assert "detail" in data
 
 
 @pytest.mark.asyncio
 async def test_users_me_invalid_token(async_client):
     """Test getting current user information with invalid token."""
     async_client.cookies.set("access_token", "Bearer invalid_token")
-    response = await async_client.get("/platform/users/me")
+    response = await async_client.get("/platform/users/self")
 
     assert response.status_code == 401
     data = response.json()
-    assert "error" in data
+    assert "detail" in data
 
 
 @pytest.mark.asyncio
@@ -75,14 +77,16 @@ async def test_users_me_nonexistent_user(async_client):
     """Test getting current user information with token for non-existent user."""
     # Generate token for non-existent user
     fake_user_id = "550e8400-e29b-41d4-a716-446655440000"
-    access_token = generate_jwt_token({"sub": fake_user_id})
+    access_token = generate_jwt_token(
+        {"sub": fake_user_id}, audience=JWT_AUDIENCE_PLATFORM
+    )
 
     async_client.cookies.set("access_token", f"Bearer {access_token}")
-    response = await async_client.get("/platform/users/me")
+    response = await async_client.get("/platform/users/self")
 
     assert response.status_code == 401
     data = response.json()
-    assert "error" in data
+    assert "detail" in data
 
 
 @pytest.mark.asyncio
@@ -107,10 +111,12 @@ async def test_users_me_inactive_user(async_client):
         user_id = user.id
 
     # Generate JWT token for inactive user
-    access_token = generate_jwt_token({"sub": str(user_id)})
+    access_token = generate_jwt_token(
+        {"sub": str(user_id)}, audience=JWT_AUDIENCE_PLATFORM
+    )
 
     async_client.cookies.set("access_token", f"Bearer {access_token}")
-    response = await async_client.get("/platform/users/me")
+    response = await async_client.get("/platform/users/self")
 
     # Currently, the endpoint allows inactive users to access their info
     assert response.status_code == 200

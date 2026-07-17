@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="10 10 44 44" role="img" aria-label="Launchbase">
+  <!--
+    Launchbase favicon — the Pad mark, tight-cropped (2u margin).
+    Theme-aware: ink dome on light tabs, paper dome on dark tabs;
+    the Flame pad steps one shade lighter on dark.
+  -->
+  <style>
+    .dome { fill: #0A0A0A; }
+    .pad  { fill: #FF4F1F; }
+    @media (prefers-color-scheme: dark) {
+      .dome { fill: #FAFAFA; }
+      .pad  { fill: #FF6A3D; }
+    }
+  </style>
+  <path class="dome" d="M12 35 A20 20 0 0 1 52 35 Z"/>
+  <rect class="pad" x="12" y="43" width="40" height="7" rx="3.5"/>
+</svg>

@@ -11,15 +11,21 @@ windows:
     panes:
       - make run
       - blank
+  - window_name: site
+    layout: even-vertical
+    start_directory: ./site
+    panes:
+      - make run
+      - blank
   - window_name: platform
     layout: even-vertical
     start_directory: ./platform
     panes:
       - make run
       - blank
-  - window_name: site
+  - window_name: admin
     layout: even-vertical
-    start_directory: ./site
+    start_directory: ./admin
     panes:
       - make run
       - blank

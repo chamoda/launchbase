@@ -60,15 +60,17 @@ def main():
 
 
 @cli.command()
-async def user_create(
+async def create_user(
     first_name: str = Option(...),
     last_name: str = Option(...),
     email: str = Option(...),
     password: str = Option(None, help="Login password. Generated if not given."),
+    admin: bool = Option(False, "--admin", help="Grant admin privileges."),
 ):
     """Create a user.
 
     The login password is generated unless provided with --password.
+    Pass --admin to grant admin privileges.
     """
     try:
         data = UserCreate(first_name=first_name, last_name=last_name, email=email)
@@ -91,9 +93,10 @@ async def user_create(
         **data.model_dump(),
         password=hash_password(password),
         is_active=True,
+        is_admin=admin,
     )
     session.add(user)
     await session.commit()
-    print("User created: ", user.id)
+    print(f"{'Admin' if admin else 'User'} created: ", user.id)
     if generated:
         print("Generated password: ", password)

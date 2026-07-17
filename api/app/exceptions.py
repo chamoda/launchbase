@@ -1,13 +1,21 @@
-from typing import Any, Dict, Optional
+from typing import Optional
 
 from fastapi import HTTPException, status
 from fastapi.responses import JSONResponse
 
-from app.schemas import ErrorDetail, ErrorResponse
-
 
 class APIException(HTTPException):
-    """Custom exception that returns consistent error format"""
+    """Custom exception rendered in FastAPI's validation-error shape.
+
+    The body mirrors what Pydantic/FastAPI emit for a 422 so the frontend can
+    handle every error the same way — mapping each entry to a form field via
+    its `loc`:
+
+        {"detail": [{"type": <code>, "loc": ["body", <field>], "msg": <message>}]}
+
+    When an error isn't tied to a specific input field, `loc` is just ["body"]
+    and the frontend surfaces it as a form-level error.
+    """
 
     def __init__(
         self,
@@ -15,22 +23,20 @@ class APIException(HTTPException):
         code: str,
         message: str,
         field: Optional[str] = None,
-        details: Optional[Dict[str, Any]] = None,
     ):
         self.code = code
         self.message = message
         self.field = field
-        self.details = details
         super().__init__(status_code=status_code, detail=message)
 
     def to_response(self) -> JSONResponse:
-        error_detail = ErrorDetail(
-            code=self.code, message=self.message, field=self.field, details=self.details
-        )
-        error_response = ErrorResponse(error=error_detail)
-        return JSONResponse(
-            status_code=self.status_code, content=error_response.model_dump()
-        )
+        loc = ["body", self.field] if self.field else ["body"]
+        error = {
+            "type": self.code.lower(),
+            "loc": loc,
+            "msg": self.message,
+        }
+        return JSONResponse(status_code=self.status_code, content={"detail": [error]})
 
 
 class ResourceNotFoundException(APIException):
@@ -47,6 +53,16 @@ class ValidationException(APIException):
         super().__init__(
             status_code=status.HTTP_400_BAD_REQUEST,
             code="VALIDATION_ERROR",
+            message=message,
+            field=field,
+        )
+
+
+class ConflictException(APIException):
+    def __init__(self, message: str, field: Optional[str] = None):
+        super().__init__(
+            status_code=status.HTTP_409_CONFLICT,
+            code="CONFLICT",
             message=message,
             field=field,
         )

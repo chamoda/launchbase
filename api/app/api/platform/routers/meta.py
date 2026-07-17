@@ -11,7 +11,11 @@ from app.exceptions import APIException
 from app.logging import logging
 from app.models import User
 from app.schemas import HealthCheckResponse, MessageResponse
-from app.security import generate_jwt_token, verify_password
+from app.security import (
+    JWT_AUDIENCE_PLATFORM,
+    generate_jwt_token,
+    verify_password,
+)
 
 router = APIRouter()
 
@@ -43,7 +47,9 @@ async def auth(
 
     if user and user.password is not None:
         if verify_password(auth_request.password, user.password):
-            access_token = generate_jwt_token({"sub": str(user.id)})
+            access_token = generate_jwt_token(
+                {"sub": str(user.id)}, audience=JWT_AUDIENCE_PLATFORM
+            )
             response.set_cookie(
                 key="access_token",
                 value=f"Bearer {access_token}",

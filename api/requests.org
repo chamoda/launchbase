@@ -13,10 +13,11 @@ GET /health
 
 ** Authenticate
 POST /auth
+Content-Type: application/json
 # Returns: 200 OK with access token
 
 {
-  "email": "chamoda@xaventra.com",
+  "email": "user@example.com",
   "password": "11111111"
 }
 
@@ -25,6 +26,86 @@ POST /logout
 # Returns: 200 OK with {"message": "Successfully logged out"}
 
 ** Get current user
-GET /users/me
+GET /users/self
 # Returns: 200 OK with user details
 # Requires: Authentication
+
+* Admin API                                                            :verb:
+Template http://localhost:8000/admin
+# Access-Token: Bearer TOKEN
+
+** Health check                                                       :verb:
+GET /health
+# Returns: 200 OK with {"status": "healthy"} when healthy
+# Returns: 503 Service Unavailable with {"status": "unhealthy"} when unhealthy
+
+** Authenticate
+POST /auth
+Content-Type: application/json
+# Returns: 200 OK with access token
+# Note: only users with is_admin may authenticate here
+
+{
+  "email": "admin@example.com",
+  "password": "adminpass1"
+}
+
+** Logout
+POST /logout
+# Returns: 200 OK with {"message": "Successfully logged out"}
+
+** Get current admin user
+GET /users/self
+# Returns: 200 OK with admin user details
+# Requires: Admin authentication (403 ADMIN_REQUIRED otherwise)
+
+** List users
+GET /users?limit=50&offset=0
+# Returns: 200 OK with {items, total, limit, offset}
+# Query: limit (1-100, default 50), offset (>=0, default 0)
+# Requires: Admin authentication
+
+** Create user
+POST /users
+Content-Type: application/json
+# Returns: 201 Created with the new user
+# Returns: 409 Conflict if the email already exists
+# Requires: Admin authentication
+
+{
+  "first_name": "Jane",
+  "last_name": "Doe",
+  "email": "jane@example.com",
+  "password": "secret123",
+  "is_admin": false,
+  "is_active": true
+}
+
+** Update user (partial)
+PATCH /users/{{(verb-var user-id)}}
+Content-Type: application/json
+# Returns: 200 OK with the updated user
+# Note: only sent fields change; password is ignored here (use change-password)
+# Returns: 404 if not found, 409 on email conflict
+# Requires: Admin authentication
+
+{
+  "last_name": "Smith",
+  "is_admin": true
+}
+
+** Change user password
+POST /users/{{(verb-var user-id)}}/change-password
+Content-Type: application/json
+# Returns: 204 No Content
+# Requires: Admin authentication
+
+{
+  "password": "brandnew1"
+}
+
+** Delete user
+DELETE /users/{{(verb-var user-id)}}
+# Returns: 204 No Content (row hard-deleted)
+# Returns: 404 if not found
+# Requires: Admin authentication

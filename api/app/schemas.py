@@ -1,5 +1,5 @@
 from datetime import UTC
-from typing import Annotated, Any
+from typing import Annotated
 
 from pydantic import (
     AwareDatetime,
@@ -23,17 +23,6 @@ class Model(BaseModel):
 
 class MessageResponse(Model):
     message: str
-
-
-class ErrorDetail(Model):
-    code: str
-    message: str
-    field: str | None = None
-    details: dict[str, Any] | None = None
-
-
-class ErrorResponse(Model):
-    error: ErrorDetail
 
 
 class HealthCheckResponse(Model):
