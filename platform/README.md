@@ -24,7 +24,7 @@ First, copy the env file and run the development server:
 
 ```bash
 cp .env.example .env.local                # then edit values
-npm run dev
+make run                                  # http://localhost:3001
 ```
 
 ## API SDK

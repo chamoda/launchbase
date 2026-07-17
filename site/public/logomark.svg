@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Launchbase logomark">
+  <!--
+    Launchbase logomark — "Pad"
+    A dome hovering over its detached pad: lift-off the base; also a rising sun.
+    Geometry: 20u-radius dome, 7u pill bar, 8u gap; bounds 12..52 x 15..50.
+    Color: dome inherits `currentColor`; the pad bar carries the brand accent,
+    Flame #FF4F1F (use #FF6A3D on dark backgrounds).
+  -->
+  <path d="M12 35 A20 20 0 0 1 52 35 Z" fill="currentColor"/>
+  <rect x="12" y="43" width="40" height="7" rx="3.5" fill="#FF4F1F"/>
+</svg>

@@ -15,5 +15,11 @@ windows:
     layout: even-vertical
     start_directory: ./platform
     panes:
-      - npm run dev -- --port 3000
+      - make run
+      - blank
+  - window_name: site
+    layout: even-vertical
+    start_directory: ./site
+    panes:
+      - make run
       - blank

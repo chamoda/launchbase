@@ -10,9 +10,11 @@ defaults so you can skip the wiring and start building.
 | ----------- | ----------------------------------------------------------------------- |
 | `api/`      | FastAPI backend — async SQLAlchemy, Postgres, Alembic, JWT auth, pytest |
 | `platform/` | Next.js frontend — SSG-first (Jamstack), Tailwind, shadcn/ui            |
+| `site/`     | Next.js landing page — SSG-first, API-less, full shadcn/ui component set |
 
 Each folder has its own README with setup and workflow details:
-[api/README.md](api/README.md), [platform/README.md](platform/README.md).
+[api/README.md](api/README.md), [platform/README.md](platform/README.md),
+[site/README.md](site/README.md).
 
 ## Requirements
 
@@ -38,7 +40,13 @@ cd ..
 cd platform
 npm install
 cp .env.example .env.local               # then edit values
-npm run dev                              # http://localhost:3000
+make run                                 # http://localhost:3001
+cd ..
+
+# Site (landing page)
+cd site
+npm install
+make run                                 # http://localhost:3000
 ```
 
 ## API SDK generation

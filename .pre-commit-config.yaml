@@ -58,3 +58,19 @@ repos:
         files: ^platform/.*\.(ts|tsx)$
         pass_filenames: false
         entry: bash -c 'cd platform && npx tsc --noEmit'
+      - id: prettier-site
+        name: prettier (site)
+        language: system
+        files: ^site/.*\.(js|jsx|ts|tsx|json|md|yaml|yml|css|scss|sass)$
+        entry: bash -c 'cd site && npx prettier --write --ignore-unknown "${@#site/}"' --
+      - id: eslint-site
+        name: eslint (site)
+        language: system
+        files: ^site/.*\.(js|jsx|ts|tsx)$
+        entry: bash -c 'cd site && npx eslint --fix --no-warn-ignored "${@#site/}"' --
+      - id: type-check-site
+        name: type-check (site)
+        language: system
+        files: ^site/.*\.(ts|tsx)$
+        pass_filenames: false
+        entry: bash -c 'cd site && npx tsc --noEmit'
