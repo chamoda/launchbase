@@ -89,6 +89,11 @@
     .cand .label b { display: block; font-size: 12px; font-weight: 600; }
     .cand .label small { display: block; font-size: 11px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
 
+    .banners { display: grid; gap: 12px; }
+    .banner { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: var(--surface); }
+    .banner img { display: block; width: 100%; height: auto; }
+    .banner figcaption { font-size: 11px; color: var(--muted); padding: 10px 14px; border-top: 1px solid var(--border); }
+
     .swatches { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
     .swatch { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: var(--surface); }
     .swatch .chip { height: 64px; }
@@ -185,6 +190,24 @@
         </svg>
       </div>
     </div>
+
+    <h2>README Banner</h2>
+    <div class="banners">
+      <figure class="banner">
+        <img src="banner-light.svg" alt="Launchbase banner, light" />
+        <figcaption>Light — <code>banner-light.svg</code></figcaption>
+      </figure>
+      <figure class="banner">
+        <img src="banner-dark.svg" alt="Launchbase banner, dark" />
+        <figcaption>Dark — <code>banner-dark.svg</code></figcaption>
+      </figure>
+    </div>
+    <p class="note">
+      The README header, served theme-aware via <code>&lt;picture&gt;</code>.
+      The Pad lockup centered on paper / dark surface, with a tagline in slate.
+      Note: GitHub renders SVG server-side without Inter installed, so the
+      wordmark falls back to the system sans there.
+    </p>
 
     <h2>Accent — Launch<em>base</em></h2>
     <div class="cand-grid">

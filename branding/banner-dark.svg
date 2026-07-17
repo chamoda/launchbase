@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 360" width="1280" height="360" role="img" aria-label="Launchbase — a polyglot monorepo template">
+  <!--
+    Launchbase README banner — dark theme.
+    The Pad lockup (logomark + wordmark) centered on dark surface, with tagline.
+    Paper dome, Flame·dark #FF6A3D pad + "base" syllable, lifted Slate tagline.
+    Canonical geometry lives in logomark.svg / wordmark.svg.
+  -->
+  <rect x="1" y="1" width="1278" height="358" rx="20" fill="#0F0F10" stroke="#232326" stroke-width="1"/>
+
+  <!-- Lockup: nested SVG auto-scales the 330×64 lockup coordinate system -->
+  <svg x="330" y="96" width="620" height="120" viewBox="0 0 330 64" preserveAspectRatio="xMidYMid meet" overflow="visible">
+    <g fill="#FAFAFA" transform="translate(-12 -3.5)">
+      <path d="M12 35 A20 20 0 0 1 52 35 Z"/>
+      <rect x="12" y="43" width="40" height="7" rx="3.5" fill="#FF6A3D"/>
+    </g>
+    <text x="57" y="46" font-family="Inter, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif"
+          font-size="48" font-weight="600" letter-spacing="-0.8"
+          fill="#FAFAFA">Launch<tspan fill="#FF6A3D">base</tspan></text>
+  </svg>
+
+  <text x="640" y="256" text-anchor="middle"
+        font-family="Inter, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif"
+        font-size="20" font-weight="500" letter-spacing="0.02em"
+        fill="#A3A3A3">A polyglot monorepo template · FastAPI + Next.js</text>
+</svg>
