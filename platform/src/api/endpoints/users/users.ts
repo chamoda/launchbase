@@ -44,7 +44,7 @@ const withQueryKey = <T extends object, K>(
 };
 
 export const getGetCurrentUserUrl = () => {
-  return `/users/me`;
+  return `/users/self`;
 };
 
 /**
@@ -60,7 +60,7 @@ export const getCurrentUser = async (
 };
 
 export const getGetCurrentUserQueryKey = () => {
-  return [`/users/me`] as const;
+  return [`/users/self`] as const;
 };
 
 export const getGetCurrentUserQueryOptions = <

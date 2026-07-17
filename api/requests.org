@@ -16,8 +16,8 @@ POST /auth
 # Returns: 200 OK with access token
 
 {
-  "email": "chamoda+10@xaventra.com",
-  "password": "NewP@ssw0rd123"
+  "email": "chamoda@xaventra.com",
+  "password": "11111111"
 }
 
 ** Logout
