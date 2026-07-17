@@ -1,0 +1,30 @@
+# Local Variables:
+# eval: (verb-mode)
+# End:
+
+* Platform API                                                         :verb:
+Template http://localhost:8000/platform
+# Access-Token: Bearer TOKEN
+
+** Health check                                                       :verb:
+GET /health
+# Returns: 200 OK with {"status": "healthy"} when healthy
+# Returns: 503 Service Unavailable with {"status": "unhealthy"} when unhealthy
+
+** Authenticate
+POST /auth
+# Returns: 200 OK with access token
+
+{
+  "email": "chamoda+10@xaventra.com",
+  "password": "NewP@ssw0rd123"
+}
+
+** Logout
+POST /logout
+# Returns: 200 OK with {"message": "Successfully logged out"}
+
+** Get current user
+GET /users/me
+# Returns: 200 OK with user details
+# Requires: Authentication

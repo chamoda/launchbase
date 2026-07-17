@@ -1,0 +1,40 @@
+name: Tests
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        run: uv python install
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Run tests with coverage
+        run: uv run pytest tests/ -v --tb=short --cov=app --cov-report=xml --cov-report=term-missing
+        env:
+          # Set test environment
+          ENVIRONMENT: test
+          # Required environment variables for settings validation
+          SECRET_KEY: test-secret-key-for-ci-only-not-production
+          SQLALCHEMY_DATABASE_URI: postgresql+asyncpg://test:test@localhost:5432/test_db
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
+        with:
+          file: ./coverage.xml
+          fail_ci_if_error: false

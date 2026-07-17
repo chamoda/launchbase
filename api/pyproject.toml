@@ -1,0 +1,69 @@
+[project]
+name = "app"
+version = "0.1.0"
+description = "A minimal FastAPI starter with JWT cookie auth, async SQLAlchemy, and Alembic."
+authors = [
+    {name = "Chamoda Pandithage", email = "chamoda@xaventra.com"}
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi[standard]>=0.136.0",
+    "pydantic[email]>=2.13.3",
+    "pydantic-settings>=2.14.0",
+    "sqlalchemy[asyncio]>=2.0.49",
+    "alembic>=1.18.4",
+    "argon2-cffi>=25.1.0",
+    "typer>=0.24.2",
+    "asyncpg>=0.31.0",
+    "pyjwt>=2.13.0",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+filterwarnings = [
+    "ignore::RuntimeWarning:asyncpg.*",
+    "ignore::RuntimeWarning:sqlalchemy.*",
+    "ignore:coroutine.*was never awaited:RuntimeWarning"
+]
+
+[tool.coverage.run]
+source = ["app"]
+
+[tool.coverage.report]
+show_missing = true
+
+[tool.ruff]
+target-version = "py312"
+line-length = 88
+
+[tool.ruff.lint]
+extend-select = ["I"]
+
+[tool.pyright]
+include = ["app"]
+ignore = ["migrations/*"]
+venvPath = "."
+venv = ".venv"
+typeCheckingMode = "standard"
+pythonVersion = "3.12"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "faker>=40.15.0",
+    "httpx>=0.28.1",
+    "pre-commit>=4.6.0",
+    "psycopg2-binary>=2.9.12",
+    "pyinfra>=3.7",
+    "pyright>=1.1.408",
+    "pytest>=9.0.3",
+    "pytest-asyncio>=1.3.0",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.15.20",
+    "testcontainers>=4.14.2",
+]
