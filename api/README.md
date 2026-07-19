@@ -2,17 +2,6 @@
 
 The Launchbase backend — a SaaS-shaped Python service built on FastAPI.
 
-## What's in the box
-
-- **FastAPI** with a sub-app mount pattern (`/platform`) and per-app OpenAPI docs
-- **Async-first** request path — SQLAlchemy 2.x async, `asyncpg`, `httpx`
-- **Postgres 16** with **Alembic** migrations (autogenerate-friendly)
-- **Auth** — `argon2-cffi` password hashing, JWT via `PyJWT`, secure cookies. Endpoints: `POST /auth` (login), `POST /logout`, `GET /users/me`
-- **Pagination** via `fastapi-pagination`
-- **Custom CLI** — `manage.py` powered by Typer
-- **Tests** — `pytest`, `pytest-asyncio`, real Postgres in CI via `testcontainers`
-- **Tooling** — `uv` for env & deps, `ruff` + `pyright` (via the repo-root `pre-commit`), GitHub Actions for CI
-
 ## Requirements
 
 - Python 3.12
@@ -57,9 +46,19 @@ uv run alembic revision --autogenerate -m "describe change"
 uv run alembic upgrade head
 ```
 
+### Create an admin user
+```bash
+uv run manage.py create-user \
+  --first-name Admin \
+  --last-name User \
+  --email admin@example.com \
+  --admin
+```
+The login password is generated and printed unless you pass `--password`.
+
 ### Run a custom management command
 ```bash
-uv run python manage.py --help
+uv run manage.py --help
 ```
 
 ### Lint & type-check
