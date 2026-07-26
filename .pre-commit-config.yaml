@@ -9,8 +9,13 @@ repos:
           - --unsafe
       - id: check-json
       - id: check-merge-conflict
+      - id: check-case-conflict
       - id: detect-private-key
+      - id: end-of-file-fixer
       - id: trailing-whitespace
+        args:
+          # Preserve intentional two-space line breaks in markdown.
+          - --markdown-linebreak-ext=md
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.16.0
     hooks:
@@ -74,3 +79,19 @@ repos:
         files: ^site/.*\.(ts|tsx)$
         pass_filenames: false
         entry: bash -c 'cd site && npx tsc --noEmit'
+      - id: prettier-admin
+        name: prettier (admin)
+        language: system
+        files: ^admin/.*\.(js|jsx|ts|tsx|json|md|yaml|yml|css|scss|sass)$
+        entry: bash -c 'cd admin && npx prettier --write --ignore-unknown "${@#admin/}"' --
+      - id: eslint-admin
+        name: eslint (admin)
+        language: system
+        files: ^admin/.*\.(js|jsx|ts|tsx)$
+        entry: bash -c 'cd admin && npx eslint --fix --no-warn-ignored "${@#admin/}"' --
+      - id: type-check-admin
+        name: type-check (admin)
+        language: system
+        files: ^admin/.*\.(ts|tsx)$
+        pass_filenames: false
+        entry: bash -c 'cd admin && npx tsc --noEmit'

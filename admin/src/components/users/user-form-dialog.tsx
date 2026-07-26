@@ -118,7 +118,9 @@ export function UserFormDialog({
       fields,
       fallback,
     });
-    if (formError) toast.error(formError);
+    if (formError) {
+      toast.error(formError);
+    }
   };
 
   const createMutation = useUserCreate({

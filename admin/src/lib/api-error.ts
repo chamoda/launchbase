@@ -21,10 +21,14 @@ const LOCATION_TAGS = new Set(["body", "query", "path", "header", "cookie"]);
 // "email". Returns null for form-level errors whose loc carries no field
 // (e.g. ["body"] on a 401).
 function fieldFromLoc(loc: ValidationErrorItem["loc"]): string | null {
-  if (!loc) return null;
+  if (!loc) {
+    return null;
+  }
   for (let i = loc.length - 1; i >= 0; i--) {
     const part = loc[i];
-    if (typeof part === "string" && !LOCATION_TAGS.has(part)) return part;
+    if (typeof part === "string" && !LOCATION_TAGS.has(part)) {
+      return part;
+    }
   }
   return null;
 }
@@ -32,7 +36,9 @@ function fieldFromLoc(loc: ValidationErrorItem["loc"]): string | null {
 function getDetail(error: unknown): ValidationErrorItem[] | undefined {
   if (error instanceof ApiError) {
     const detail = (error.data as ApiErrorBody | undefined)?.detail;
-    if (Array.isArray(detail) && detail.length > 0) return detail;
+    if (Array.isArray(detail) && detail.length > 0) {
+      return detail;
+    }
   }
   return undefined;
 }
@@ -44,7 +50,9 @@ export function getApiErrorMessage(error: unknown, fallback: string): string {
   const detail = getDetail(error);
   if (detail) {
     const message = detail[0]?.msg;
-    if (typeof message === "string" && message.length > 0) return message;
+    if (typeof message === "string" && message.length > 0) {
+      return message;
+    }
     return fallback;
   }
   if (error instanceof TypeError) {
