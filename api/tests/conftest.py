@@ -51,9 +51,8 @@ def postgres_container():
 
 
 @pytest.fixture
-async def async_client(postgres_container):
-    """Create async test client with test database."""
-    # Create engine for each test to avoid event loop issues
+async def test_engine(postgres_container):
+    """Create engine for each test to avoid event loop issues."""
     db_url = postgres_container.get_connection_url().replace("psycopg2", "asyncpg")
     engine = create_async_engine(
         db_url,
@@ -70,8 +69,29 @@ async def async_client(postgres_container):
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
-    # Create session factory
-    session_factory = async_sessionmaker(engine, expire_on_commit=False)
+    yield engine
+
+    # Graceful engine disposal with error handling
+    try:
+        # Use a shorter timeout and handle cleanup gracefully
+        await asyncio.wait_for(engine.dispose(), timeout=2.0)
+    except TimeoutError:
+        # If disposal times out, the connections will be forcefully closed
+        pass
+    except Exception:
+        # Ignore other disposal errors during test cleanup
+        logging.getLogger(__name__).debug("Engine disposal failed", exc_info=True)
+
+
+@pytest.fixture
+def session_factory(test_engine):
+    """Session factory for tests that need direct database access."""
+    return async_sessionmaker(test_engine, expire_on_commit=False)
+
+
+@pytest.fixture
+async def async_client(test_engine, session_factory):
+    """Create async test client with test database."""
 
     async def get_test_db():
         async with session_factory() as session:
@@ -88,18 +108,12 @@ async def async_client(postgres_container):
     original_engine = app.database.async_engine
     original_session_local = app.database.AsyncSessionLocal
 
-    app.database.async_engine = engine
+    app.database.async_engine = test_engine
     app.database.AsyncSessionLocal = session_factory
-
-    # Store the session factory for direct use in tests
-    test_session_factory = session_factory
 
     async with AsyncClient(
         transport=ASGITransport(app=fastapi_app), base_url="http://localhost"
     ) as ac:
-        # Attach the session factory to the client for direct database access
-        # Using setattr to avoid type checking issues
-        setattr(ac, "test_session_factory", test_session_factory)
         yield ac
 
     # Cleanup - ensure proper order and error handling
@@ -108,14 +122,3 @@ async def async_client(postgres_container):
     # Restore original database setup
     app.database.async_engine = original_engine
     app.database.AsyncSessionLocal = original_session_local
-
-    # Graceful engine disposal with error handling
-    try:
-        # Use a shorter timeout and handle cleanup gracefully
-        await asyncio.wait_for(engine.dispose(), timeout=2.0)
-    except asyncio.TimeoutError:
-        # If disposal times out, the connections will be forcefully closed
-        pass
-    except Exception:
-        # Ignore other disposal errors during test cleanup
-        pass

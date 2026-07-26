@@ -8,7 +8,7 @@ fake = Faker()
 
 
 @pytest.mark.asyncio
-async def test_users_me_success(async_client):
+async def test_users_me_success(async_client, session_factory):
     """Test getting current user information with valid authentication."""
     # Create a test user
     email = fake.email().lower()
@@ -17,7 +17,7 @@ async def test_users_me_success(async_client):
     last_name = fake.last_name()
 
     # Create User directly for authentication testing
-    async with getattr(async_client, "test_session_factory")() as db:
+    async with session_factory() as db:
         user = User(
             first_name=first_name,
             last_name=last_name,
@@ -90,14 +90,14 @@ async def test_users_me_nonexistent_user(async_client):
 
 
 @pytest.mark.asyncio
-async def test_users_me_inactive_user(async_client):
+async def test_users_me_inactive_user(async_client, session_factory):
     """Test getting current user information for inactive user."""
     # Note: The endpoint doesn't currently check is_active status
     # This test verifies current behavior - inactive users can still access their info
     email = fake.email().lower()
     password = "testpassword123"
 
-    async with getattr(async_client, "test_session_factory")() as db:
+    async with session_factory() as db:
         user = User(
             first_name=fake.first_name(),
             last_name=fake.last_name(),

@@ -9,6 +9,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from app.config import settings
 from app.database import DBSession
 from app.exceptions import APIException, ResourceNotFoundException
+from app.logging import logger
 from app.models import User
 from app.security import JWT_AUDIENCE_PLATFORM
 
@@ -56,7 +57,7 @@ def decode_access_token(access_token: str, audience: str) -> str:
         raise APIException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             code="INVALID_TOKEN",
-            message=f"JWT validation failed: {str(e)}",
+            message=f"JWT validation failed: {e!s}",
         )
     except APIException:
         # Re-raise our custom exceptions
@@ -90,6 +91,8 @@ async def get_current_user(session: DBSession, access_token: str, audience: str)
             # Re-raise our custom exceptions
             raise
         except Exception:
+            # Fail closed on anything unexpected, but record why.
+            logger.exception("Unexpected error while authenticating user")
             raise APIException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 code="AUTHENTICATION_FAILED",
@@ -125,7 +128,8 @@ def build_http_user_dependency(audience: str, cookie_name: str):
             # Convert specific errors to generic credentials exception for security
             raise http_credentials_exception
         except Exception:
-            # Catch any unexpected errors and convert to credentials exception
+            # Fail closed on anything unexpected, but record why.
+            logger.exception("Unexpected error while resolving current user")
             raise http_credentials_exception
 
     return get_current_http_user

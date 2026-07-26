@@ -88,6 +88,6 @@ async def run_migrations_online() -> None:
 
 
 if context.is_offline_mode():
-    logging.info("Can't run migrations offline")
+    logging.getLogger(__name__).info("Can't run migrations offline")
 else:
     asyncio.run(run_migrations_online())

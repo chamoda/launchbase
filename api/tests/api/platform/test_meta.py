@@ -18,13 +18,13 @@ async def test_health_endpoint_healthy(async_client):
 
 
 @pytest.mark.asyncio
-async def test_auth_success(async_client):
+async def test_auth_success(async_client, session_factory):
     """Test successful authentication with valid credentials."""
     email = fake.email().lower()
     password = "testpassword123"
 
     # Create User directly for authentication testing
-    async with getattr(async_client, "test_session_factory")() as db:
+    async with session_factory() as db:
         user = User(
             first_name=fake.first_name(),
             last_name=fake.last_name(),
@@ -55,13 +55,13 @@ async def test_auth_invalid_email(async_client):
 
 
 @pytest.mark.asyncio
-async def test_auth_invalid_password(async_client):
+async def test_auth_invalid_password(async_client, session_factory):
     """Test authentication fails with wrong password."""
     # Create a test user
     email = fake.email().lower()
     password = "correctpassword"
 
-    async with getattr(async_client, "test_session_factory")() as db:
+    async with session_factory() as db:
         user = User(
             first_name=fake.first_name(),
             last_name=fake.last_name(),

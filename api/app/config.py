@@ -1,5 +1,3 @@
-from typing import Optional
-
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -23,7 +21,7 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str = "HS256"
 
     # Cloudflare API token for SSL certificates
-    CLOUDFLARE_API_TOKEN: Optional[str] = None
+    CLOUDFLARE_API_TOKEN: str | None = None
 
     @field_validator("SECRET_KEY")
     @classmethod

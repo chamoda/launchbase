@@ -1,5 +1,3 @@
-from typing import Optional
-
 from fastapi import HTTPException, status
 from fastapi.responses import JSONResponse
 
@@ -22,7 +20,7 @@ class APIException(HTTPException):
         status_code: int,
         code: str,
         message: str,
-        field: Optional[str] = None,
+        field: str | None = None,
     ):
         self.code = code
         self.message = message
@@ -49,7 +47,7 @@ class ResourceNotFoundException(APIException):
 
 
 class ValidationException(APIException):
-    def __init__(self, message: str, field: Optional[str] = None):
+    def __init__(self, message: str, field: str | None = None):
         super().__init__(
             status_code=status.HTTP_400_BAD_REQUEST,
             code="VALIDATION_ERROR",
@@ -59,7 +57,7 @@ class ValidationException(APIException):
 
 
 class ConflictException(APIException):
-    def __init__(self, message: str, field: Optional[str] = None):
+    def __init__(self, message: str, field: str | None = None):
         super().__init__(
             status_code=status.HTTP_409_CONFLICT,
             code="CONFLICT",
