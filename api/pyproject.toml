@@ -37,6 +37,9 @@ show_missing = true
 [tool.ruff]
 target-version = "py312"
 line-length = 88
+# Revision files are generated from migrations/script.py.mako, so alembic owns
+# their layout. env.py is hand-maintained and stays linted.
+extend-exclude = ["migrations/versions"]
 
 [tool.ruff.lint]
 extend-select = ["I"]
