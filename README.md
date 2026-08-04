@@ -5,7 +5,7 @@
   </picture>
 </p>
 
-A polyglot monorepo template: a FastAPI backend and Next.js SSG-first
+A pragmatic polyglot monorepo template: a FastAPI backend and Next.js SSG-first
 frontends, with shared tooling wired for monorepo development. Opinionated
 defaults so you can skip the wiring and start building.
 
