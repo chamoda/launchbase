@@ -1,3 +1,5 @@
+from typing import Literal
+
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -8,6 +10,7 @@ class Settings(BaseSettings):
     )
 
     PROJECT_NAME: str = "app"
+    ENVIRONMENT: Literal["development", "staging", "production"] = "development"
     LOG_LEVEL: str = "DEBUG"
     SECRET_KEY: str = ""
     SQLALCHEMY_DATABASE_URI: str = ""
@@ -40,6 +43,10 @@ class Settings(BaseSettings):
                 "SQLALCHEMY_DATABASE_URI cannot be empty. Set SQLALCHEMY_DATABASE_URI environment variable."
             )
         return v
+
+    @property
+    def is_production(self) -> bool:
+        return self.ENVIRONMENT == "production"
 
     @property
     def cors_origins_list(self) -> list[str]:

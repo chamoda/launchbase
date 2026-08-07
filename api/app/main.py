@@ -19,8 +19,18 @@ def route_operation_id(route: APIRoute) -> str:
     return route.name
 
 
+# The OpenAPI schema and the interactive docs it powers expose the full API
+# surface, so they are served everywhere except production. Passed to every app
+# below: the mounted sub-apps serve their own docs, independently of the root.
+openapi_url = None if settings.is_production else "/openapi.json"
+docs_url = None if settings.is_production else "/docs"
+redoc_url = None if settings.is_production else "/redoc"
+
 app = FastAPI(
     title=settings.PROJECT_NAME,
+    openapi_url=openapi_url,
+    docs_url=docs_url,
+    redoc_url=redoc_url,
 )
 
 platform_api = FastAPI(
@@ -32,6 +42,9 @@ platform_api = FastAPI(
         {"name": "auth", "description": "Authentication and session"},
         {"name": "users", "description": "User endpoints"},
     ],
+    openapi_url=openapi_url,
+    docs_url=docs_url,
+    redoc_url=redoc_url,
 )
 
 
@@ -60,6 +73,9 @@ admin_api = FastAPI(
         {"name": "auth", "description": "Authentication and session"},
         {"name": "users", "description": "User endpoints"},
     ],
+    openapi_url=openapi_url,
+    docs_url=docs_url,
+    redoc_url=redoc_url,
 )
 
 
