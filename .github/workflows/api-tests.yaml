@@ -36,7 +36,7 @@ jobs:
         run: uv run pytest tests/ -v --tb=short --cov=app --cov-report=xml --cov-report=term-missing
         env:
           # Set test environment
-          ENVIRONMENT: test
+          ENVIRONMENT: development
           # Required environment variables for settings validation
           SECRET_KEY: test-secret-key-for-ci-only-not-production
           SQLALCHEMY_DATABASE_URI: postgresql+asyncpg://test:test@localhost:5432/test_db
