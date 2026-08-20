@@ -72,9 +72,17 @@ npx shadcn@latest add <component>
 ## Code Quality
 
 Git hooks for the whole monorepo are managed by
-[pre-commit](https://pre-commit.com) at the repo root — prettier, ESLint, and
+[pre-commit](https://pre-commit.com) at the repo root — oxfmt, oxlint, and
 `tsc` run automatically on staged `site/` files before each commit. See the
 [root README](../README.md#git-hooks) for setup.
+
+Linting and formatting use the [oxc](https://oxc.rs) toolchain (same org as
+Vite and Rolldown) rather than ESLint and Prettier: `oxlint` reads
+`.oxlintrc.json`, `oxfmt` reads `.oxfmtrc.json`. Both are Rust binaries with no
+plugin dependencies — a full lint of `site/` runs in ~70ms against ESLint's
+~5s. The oxfmt config was migrated from the old `.prettierrc` and produces
+byte-identical output, so `site/` stays formatted exactly like `platform/` and
+`admin/`, which still run ESLint and Prettier.
 
 Run the checks manually:
 

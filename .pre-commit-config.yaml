@@ -63,16 +63,16 @@ repos:
         files: ^platform/.*\.(ts|tsx)$
         pass_filenames: false
         entry: bash -c 'cd platform && npm run type-check'
-      - id: prettier-site
-        name: prettier (site)
+      - id: oxfmt-site
+        name: oxfmt (site)
         language: system
         files: ^site/.*\.(js|jsx|ts|tsx|json|md|yaml|yml|css|scss|sass)$
-        entry: bash -c 'cd site && npx prettier --write --ignore-unknown "${@#site/}"' --
-      - id: eslint-site
-        name: eslint (site)
+        entry: bash -c 'cd site && npx oxfmt --no-error-on-unmatched-pattern "${@#site/}"' --
+      - id: oxlint-site
+        name: oxlint (site)
         language: system
         files: ^site/.*\.(js|jsx|ts|tsx)$
-        entry: bash -c 'cd site && npx eslint --fix --no-warn-ignored "${@#site/}"' --
+        entry: bash -c 'cd site && npx oxlint --fix --deny-warnings --no-error-on-unmatched-pattern "${@#site/}"' --
       - id: type-check-site
         name: type-check (site)
         language: system
