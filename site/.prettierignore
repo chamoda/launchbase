@@ -5,10 +5,13 @@ pnpm-lock.yaml
 yarn.lock
 
 # Build outputs
-.next
-out
-build
 dist
+build
+.tanstack
+.output
+
+# Generated
+src/routeTree.gen.ts
 
 # Cache
 .turbo

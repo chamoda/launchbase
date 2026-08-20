@@ -1,7 +1,4 @@
-"use client";
-
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { LayoutDashboard, LogOut } from "lucide-react";
 import { logout } from "@/api/endpoints/auth/auth";
@@ -10,13 +7,15 @@ import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
+// `as const` keeps the hrefs as literal types, so TanStack Router can
+// type-check them against the generated route tree.
 const NAV_ITEMS = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-];
+] as const;
 
 export function Sidebar() {
-  const pathname = usePathname();
-  const router = useRouter();
+  const pathname = useLocation({ select: (l) => l.pathname });
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const user = useCurrentUser();
 
@@ -27,7 +26,7 @@ export function Sidebar() {
     onSettled: () => {
       // Drop every cached query so the next session starts clean, then leave.
       queryClient.clear();
-      router.push("/login");
+      navigate({ to: "/login" });
     },
   });
 
@@ -38,7 +37,7 @@ export function Sidebar() {
   return (
     <aside className="flex h-screen w-64 shrink-0 flex-col border-r bg-background">
       <div className="flex h-16 items-center px-6">
-        <Link href="/dashboard" aria-label="Launchbase">
+        <Link to="/dashboard" aria-label="Launchbase">
           <Logo className="h-7" />
         </Link>
       </div>
@@ -49,7 +48,7 @@ export function Sidebar() {
           return (
             <Link
               key={href}
-              href={href}
+              to={href}
               className={cn(
                 "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
                 active

@@ -62,7 +62,7 @@ repos:
         language: system
         files: ^platform/.*\.(ts|tsx)$
         pass_filenames: false
-        entry: bash -c 'cd platform && npx tsc --noEmit'
+        entry: bash -c 'cd platform && npm run type-check'
       - id: prettier-site
         name: prettier (site)
         language: system
@@ -78,7 +78,7 @@ repos:
         language: system
         files: ^site/.*\.(ts|tsx)$
         pass_filenames: false
-        entry: bash -c 'cd site && npx tsc --noEmit'
+        entry: bash -c 'cd site && npm run type-check'
       - id: prettier-admin
         name: prettier (admin)
         language: system
@@ -94,4 +94,4 @@ repos:
         language: system
         files: ^admin/.*\.(ts|tsx)$
         pass_filenames: false
-        entry: bash -c 'cd admin && npx tsc --noEmit'
+        entry: bash -c 'cd admin && npm run type-check'

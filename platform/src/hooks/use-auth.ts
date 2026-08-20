@@ -1,16 +1,14 @@
-"use client";
-
-import { useRouter, usePathname } from "next/navigation";
+import { useLocation, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useGetCurrentUser } from "@/api/endpoints/users/users";
 import { PUBLIC_ROUTES } from "@/lib/routes";
 
 // Resolves the current session from GET /users/me (authenticated via the
 // httponly access_token cookie) and redirects to /login when a protected
-// (main) route is hit without a valid session.
+// route is hit without a valid session.
 export function useAuth() {
-  const router = useRouter();
-  const pathname = usePathname();
+  const navigate = useNavigate();
+  const pathname = useLocation({ select: (l) => l.pathname });
   const [isInitialMount, setIsInitialMount] = useState(true);
 
   const {
@@ -29,14 +27,14 @@ export function useAuth() {
   useEffect(() => {
     if (!queryLoading) {
       if (error) {
-        // Only redirect to login from protected routes; (meta) routes such as
-        // /login are public and must render without a session.
+        // Only redirect to login from protected routes; public routes such
+        // as /login must render without a session.
         const isMetaRoute = PUBLIC_ROUTES.some((route) =>
           pathname.startsWith(route)
         );
 
         if (!isMetaRoute) {
-          router.replace("/login");
+          navigate({ to: "/login", replace: true });
           return undefined;
         }
       }
@@ -47,7 +45,7 @@ export function useAuth() {
       return () => clearTimeout(timer);
     }
     return undefined;
-  }, [queryLoading, error, router, pathname]);
+  }, [queryLoading, error, navigate, pathname]);
 
   const isLoading = queryLoading || isInitialMount;
   const isAuthenticated = !isLoading && !error && !!user;

@@ -1,5 +1,3 @@
-"use client";
-
 import { createContext, useContext, ReactNode } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import type { AdminUserResponse } from "@/api/model";

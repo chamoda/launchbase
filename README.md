@@ -5,7 +5,7 @@
   </picture>
 </p>
 
-A pragmatic polyglot monorepo template: a FastAPI backend and Next.js SSG-first
+A pragmatic polyglot monorepo template: a FastAPI backend and TanStack Start
 frontends, with shared tooling wired for monorepo development. Opinionated
 defaults so you can skip the wiring and start building.
 
@@ -14,9 +14,9 @@ defaults so you can skip the wiring and start building.
 | Folder      | What it is                                                                     | Setup                                     |
 | ----------- | ------------------------------------------------------------------------------ | ----------------------------------------- |
 | `api/`      | FastAPI backend — async SQLAlchemy, Postgres, Alembic, JWT auth, pytest        | [api/README.md](api/README.md)            |
-| `platform/` | Next.js frontend — SSG-first (Jamstack), Tailwind, shadcn/ui                   | [platform/README.md](platform/README.md)  |
-| `admin/`    | Next.js admin console — SSG-first, user management on the API `/admin` surface | [admin/README.md](admin/README.md)        |
-| `site/`     | Next.js landing page — SSG-first, API-less, full shadcn/ui component set       | [site/README.md](site/README.md)          |
+| `platform/` | TanStack Start frontend — SPA, Tailwind, shadcn/ui                             | [platform/README.md](platform/README.md)  |
+| `admin/`    | TanStack Start admin console — SPA, user management on the API `/admin` surface | [admin/README.md](admin/README.md)        |
+| `site/`     | TanStack Start landing page — SSG, API-less, full shadcn/ui component set      | [site/README.md](site/README.md)          |
 
 Each folder's README has the setup and workflow details — start there.
 

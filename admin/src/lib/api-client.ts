@@ -1,6 +1,13 @@
 // Shared fetch mutator used by all Orval-generated endpoints.
 // Cookie-based auth: `credentials: "include"` sends the session cookie to the API.
-const baseURL = `${process.env["NEXT_PUBLIC_API_URL"]}/admin`;
+// Fail at load rather than letting an unset var produce a `undefined/...`
+// URL, which resolves against the dev server and 404s confusingly.
+const apiUrl = import.meta.env.VITE_API_URL;
+if (!apiUrl) {
+  throw new Error("VITE_API_URL is not set — copy .env.example to .env.local");
+}
+
+const baseURL = `${apiUrl}/admin`;
 
 // Error thrown for non-2xx responses: HTTP `status` and the parsed response
 // `data`. Network failures (no response) surface as the native fetch

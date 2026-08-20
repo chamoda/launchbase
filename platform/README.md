@@ -1,20 +1,37 @@
 # Launchbase Platform
 
-The Launchbase frontend — a [Next.js](https://nextjs.org) app with a special
-focus on SSG-first rendering.
+The Launchbase frontend — a [TanStack Start](https://tanstack.com/start)
+single-page app.
 
 ## Architecture
 
-This project is built on the **Jamstack architecture**, leveraging Next.js's powerful Static Site Generation (SSG) capabilities. By pre-rendering pages at build time, the application delivers:
+The app runs in TanStack Start's **SPA mode**: routes are never rendered on
+the server. The build prerenders the document shell once to
+`dist/client/_shell.html`; the host serves that file for every path (see
+`public/_redirects`) and the router takes over on the client. That keeps
+deployment to static files on a CDN, with no server runtime, while every
+screen stays behind the session check in `AuthGuard`.
 
-- **Lightning-fast performance**: Static HTML files served directly from CDN
-- **Enhanced security**: No server-side runtime reduces attack surface
-- **Scalability**: Static files can be distributed globally with minimal infrastructure
-- **SEO optimization**: Fully rendered HTML improves search engine indexing
+### Routing
 
-### Next.js SSG Configuration
+Routes are files under `src/routes/`, and the route tree
+(`src/routeTree.gen.ts`) is generated from them — by the Vite plugin during
+`dev`/`build`, or on demand with `npm run routes`. It is generated output and
+is not committed.
 
-The project is configured with SSG-first rendering, meaning pages are generated as static HTML at build time.
+```
+src/routes/__root.tsx          document shell + query/user providers
+src/routes/login.tsx           /login          (public)
+src/routes/_main.tsx           auth guard + sidebar chrome (pathless)
+src/routes/_main/index.tsx     /               -> redirects to /dashboard
+src/routes/_main/dashboard.tsx /dashboard
+```
+
+`_main` is a **pathless layout route**: it does not appear in the URL, but
+everything nested under it renders inside the sidebar chrome and behind the
+auth guard. Add a protected page by dropping a file in `src/routes/_main/`
+and a nav entry in `src/components/dashboard/sidebar.tsx`. Public pages go
+next to `login.tsx` and get listed in `src/lib/routes.ts`.
 
 ## Getting Started
 
@@ -23,7 +40,7 @@ The project is configured with SSG-first rendering, meaning pages are generated 
 First, copy the env file and run the development server:
 
 ```bash
-cp .env.example .env.local                # then edit values
+cp .env.example .env.local                      # then edit values
 make run                                  # http://localhost:3001
 ```
 
@@ -99,6 +116,12 @@ This project uses **maximum strictness** TypeScript configuration for enhanced t
 
 ## Production
 
+```bash
+make build             # -> dist/client/
+```
+
 ### Cloudflare Static Hosting
 
-This template is optimized for deployment on **Cloudflare Pages** as Next.js static site deployment
+This template is optimized for deployment on **Cloudflare Pages**. Publish the
+`dist/client/` directory. `public/_redirects` ships the SPA fallback rule that
+serves `_shell.html` for every path, so deep links like `/dashboard` resolve.

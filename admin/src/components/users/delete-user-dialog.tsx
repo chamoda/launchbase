@@ -1,5 +1,3 @@
-"use client";
-
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useUserDelete } from "@/api/endpoints/users/users";

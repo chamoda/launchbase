@@ -1,36 +1,31 @@
-import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
-import nextTypescript from "eslint-config-next/typescript";
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+import js from "@eslint/js";
+import globals from "globals";
+import tseslint from "typescript-eslint";
+import reactHooks from "eslint-plugin-react-hooks";
+import unusedImports from "eslint-plugin-unused-imports";
+import prettierRecommended from "eslint-plugin-prettier/recommended";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
-const eslintConfig = [
+export default [
   {
     ignores: [
-      "src/api/**",
-      ".next/**",
-      "out/**",
-      "build/**",
+      "src/routeTree.gen.ts",
       "dist/**",
+      "build/**",
       "node_modules/**",
-      ".turbo/**",
+      ".tanstack/**",
       ".cache/**",
       "*.config.js",
-      "next-env.d.ts",
     ],
   },
-  ...nextCoreWebVitals,
-  ...nextTypescript,
-  ...compat.extends("prettier"),
-  ...compat.plugins("unused-imports", "prettier"),
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  reactHooks.configs.flat.recommended,
+  prettierRecommended,
   {
+    languageOptions: {
+      globals: { ...globals.browser, ...globals.node },
+    },
+    plugins: { "unused-imports": unusedImports },
     rules: {
       "prettier/prettier": "error",
       "unused-imports/no-unused-imports": "error",
@@ -56,5 +51,3 @@ const eslintConfig = [
     },
   },
 ];
-
-export default eslintConfig;

@@ -1,5 +1,3 @@
-"use client";
-
 import { useAuthStatus } from "@/hooks/use-auth-status";
 import FullScreenLoader from "./FullScreenLoader";
 

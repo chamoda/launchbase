@@ -1,0 +1,3 @@
+# SPA fallback: every path is served the prerendered shell and routed
+# on the client. Keep this above any other rule.
+/*    /_shell.html    200

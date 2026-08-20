@@ -1,20 +1,22 @@
 # Launchbase Site
 
-The Launchbase landing page — a [Next.js](https://nextjs.org) marketing site,
-SSG-first and API-less. Unlike [`platform/`](../platform/README.md), there is
-no orval-generated API client here; it's just static pages and the full
+The Launchbase landing page — a [TanStack Start](https://tanstack.com/start)
+marketing site, statically generated and API-less. Unlike
+[`platform/`](../platform/README.md), there is no orval-generated API client
+here; it's just static pages and the full
 [shadcn/ui](https://ui.shadcn.com) component library.
 
-> The default `src/app/page.tsx` is a placeholder starter — delete it and build
-> your real landing page. The shadcn/ui components under `src/components/ui/`
-> are pre-installed so you can move fast.
+> The default `src/routes/index.tsx` is a placeholder starter — delete it and
+> build your real landing page. The shadcn/ui components under
+> `src/components/ui/` are pre-installed so you can move fast.
 
 ## Architecture
 
-Built on the **Jamstack architecture** using Next.js Static Site Generation
-(SSG). Pages are pre-rendered to static HTML at build time (`output: "export"`
-in `next.config.ts`), so the site deploys as plain files to a CDN — fast,
-secure, and cheap to host.
+Built on the **Jamstack architecture** using TanStack Start's static
+prerendering. Every route is rendered to HTML at build time (`prerender` in
+`vite.config.ts`), so the site deploys as plain files to a CDN — fast, secure,
+and cheap to host. `crawlLinks` follows internal links from rendered pages, so
+a new route linked from an existing page is prerendered automatically.
 
 ## Getting Started
 
@@ -23,12 +25,34 @@ version from `.nvmrc`.
 
 ```bash
 npm install
-cp .env.example .env.local                # then edit values (optional)
+cp .env.example .env.local                      # then edit values (optional)
 make run                                  # http://localhost:3000
 ```
 
-`make run` starts the Next.js dev server on port 3000 (the api runs on 8000,
-`platform/` on 3001).
+`make run` starts the Vite dev server on port 3000 (the api runs on 8000,
+`platform/` on 3001, `admin/` on 3002).
+
+## Routing
+
+Routes are files under `src/routes/`, and the route tree
+(`src/routeTree.gen.ts`) is generated from them — by the Vite plugin during
+`dev`/`build`, or on demand with `npm run routes`. It is generated output and
+is not committed.
+
+```
+src/routes/__root.tsx    document shell: <html>, <head> meta, stylesheet links
+src/routes/index.tsx     /
+```
+
+Page metadata lives in a route's `head()` (the equivalent of the Next.js
+`metadata` export):
+
+```tsx
+export const Route = createFileRoute("/pricing")({
+  head: () => ({ meta: [{ title: "Pricing" }] }),
+  component: Pricing,
+});
+```
 
 ## Components
 
@@ -57,13 +81,18 @@ Run the checks manually:
 ```bash
 npm run lint:fix       # lint and fix
 npm run format         # format all files
-npm run type-check     # tsc --noEmit
+npm run type-check     # generate routes + tsc --noEmit
 npm run validate       # type-check + lint + format:check
 ```
 
 ## Production
 
+```bash
+make build             # -> dist/client/
+```
+
 ### Cloudflare Static Hosting
 
 Like `platform/`, this template is optimized for deployment on **Cloudflare
-Pages** as a Next.js static site export.
+Pages**. Publish the `dist/client/` directory — it contains the prerendered
+HTML plus hashed assets, with no server component.
