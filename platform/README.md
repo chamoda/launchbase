@@ -88,9 +88,18 @@ const form = useForm<z.infer<typeof loginSchema>>({
 ## Code Quality
 
 Git hooks for the whole monorepo are managed by
-[pre-commit](https://pre-commit.com) at the repo root — prettier, ESLint, and
+[pre-commit](https://pre-commit.com) at the repo root — oxfmt, oxlint, and
 `tsc` run automatically on staged `platform/` files before each commit. See the
 [root README](../README.md#git-hooks) for setup.
+
+Linting and formatting use the [oxc](https://oxc.rs) toolchain (same org as
+Vite and Rolldown) rather than ESLint and Prettier: `oxlint` reads
+`.oxlintrc.json`, `oxfmt` reads `.oxfmtrc.json`. Both are Rust binaries with no
+plugin dependencies. The oxfmt config was migrated from the old `.prettierrc`
+and produces byte-identical output, so nothing was reformatted in the switch.
+
+The generated API client under `src/api/` is excluded from linting but is still
+formatted — `npm run generate` runs `oxfmt` over orval's output.
 
 ### Manual Commands
 

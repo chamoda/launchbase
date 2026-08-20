@@ -10,13 +10,13 @@
     "build": "vite build",
     "preview": "vite preview",
     "routes": "tsr generate",
-    "lint": "eslint . --max-warnings=0",
-    "lint:fix": "eslint --fix .",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "lint": "oxlint --deny-warnings",
+    "lint:fix": "oxlint --fix",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
     "type-check": "tsr generate && tsc --noEmit",
     "validate": "npm run type-check && npm run lint && npm run format:check",
-    "generate": "orval --config orval.config.ts && prettier --write \"src/api/**/*.ts\""
+    "generate": "orval --config orval.config.ts && oxfmt \"src/api/**/*.ts\""
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
@@ -49,7 +49,6 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.4",
     "@tailwindcss/vite": "^4.3.3",
     "@tanstack/router-cli": "^1.167.32",
     "@tanstack/router-plugin": "^1.168.34",
@@ -57,17 +56,11 @@
     "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "^6.1.0",
-    "eslint": "^9.39.4",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.6",
-    "eslint-plugin-react-hooks": "^7.1.1",
-    "eslint-plugin-unused-imports": "^4.4.1",
-    "globals": "^17.11.0",
     "orval": "^8.22.0",
-    "prettier": "^3.9.1",
+    "oxfmt": "^0.64.0",
+    "oxlint": "^1.79.0",
     "tailwindcss": "^4.3.1",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.67.0",
     "vite": "^8.2.2"
   },
   "overrides": {

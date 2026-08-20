@@ -1,0 +1,25 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "semi": true,
+  "trailingComma": "es5",
+  "singleQuote": false,
+  "printWidth": 80,
+  "tabWidth": 2,
+  "useTabs": false,
+  "sortPackageJson": false,
+  "ignorePatterns": [
+    "node_modules",
+    "package-lock.json",
+    "pnpm-lock.yaml",
+    "yarn.lock",
+    "dist",
+    "build",
+    ".tanstack",
+    ".output",
+    "src/routeTree.gen.ts",
+    ".turbo",
+    ".cache",
+    "*.tsbuildinfo",
+    ".env*"
+  ]
+}

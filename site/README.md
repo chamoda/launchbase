@@ -81,8 +81,8 @@ Vite and Rolldown) rather than ESLint and Prettier: `oxlint` reads
 `.oxlintrc.json`, `oxfmt` reads `.oxfmtrc.json`. Both are Rust binaries with no
 plugin dependencies — a full lint of `site/` runs in ~70ms against ESLint's
 ~5s. The oxfmt config was migrated from the old `.prettierrc` and produces
-byte-identical output, so `site/` stays formatted exactly like `platform/` and
-`admin/`, which still run ESLint and Prettier.
+byte-identical output, so nothing was reformatted in the switch. `platform/`
+and `admin/` use the same toolchain.
 
 Run the checks manually:
 
