@@ -121,7 +121,9 @@ npm run type-check
 
 ### TypeScript Strict Mode
 
-This project uses **maximum strictness** TypeScript configuration for enhanced type safety.
+This project uses **maximum strictness** TypeScript configuration for enhanced
+type safety, on TypeScript 7 — the native (Go) compiler, which type-checks this
+app roughly 3-6x faster than the 6.x JavaScript one.
 
 ## Production
 

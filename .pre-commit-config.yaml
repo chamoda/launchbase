@@ -57,12 +57,21 @@ repos:
         language: system
         files: ^platform/.*\.(js|jsx|ts|tsx)$
         entry: bash -c 'cd platform && npx oxlint --fix --deny-warnings --no-error-on-unmatched-pattern "${@#platform/}"' --
+      # Regenerating the route tree is only needed when a route file changed;
+      # splitting it out keeps it off the common edit-a-component commit.
+      - id: routes-platform
+        name: routes (platform)
+        language: system
+        files: ^platform/src/routes/.*\.(ts|tsx)$
+        pass_filenames: false
+        entry: bash -c 'cd platform && npx tsr generate'
       - id: type-check-platform
         name: type-check (platform)
         language: system
         files: ^platform/.*\.(ts|tsx)$
         pass_filenames: false
-        entry: bash -c 'cd platform && npm run type-check'
+        # The guard covers a fresh clone, where the gitignored tree is absent.
+        entry: bash -c 'cd platform && { [ -f src/routeTree.gen.ts ] || npx tsr generate; } && npx tsc --noEmit'
       - id: oxfmt-site
         name: oxfmt (site)
         language: system
@@ -73,12 +82,21 @@ repos:
         language: system
         files: ^site/.*\.(js|jsx|ts|tsx)$
         entry: bash -c 'cd site && npx oxlint --fix --deny-warnings --no-error-on-unmatched-pattern "${@#site/}"' --
+      # Regenerating the route tree is only needed when a route file changed;
+      # splitting it out keeps it off the common edit-a-component commit.
+      - id: routes-site
+        name: routes (site)
+        language: system
+        files: ^site/src/routes/.*\.(ts|tsx)$
+        pass_filenames: false
+        entry: bash -c 'cd site && npx tsr generate'
       - id: type-check-site
         name: type-check (site)
         language: system
         files: ^site/.*\.(ts|tsx)$
         pass_filenames: false
-        entry: bash -c 'cd site && npm run type-check'
+        # The guard covers a fresh clone, where the gitignored tree is absent.
+        entry: bash -c 'cd site && { [ -f src/routeTree.gen.ts ] || npx tsr generate; } && npx tsc --noEmit'
       - id: oxfmt-admin
         name: oxfmt (admin)
         language: system
@@ -89,9 +107,18 @@ repos:
         language: system
         files: ^admin/.*\.(js|jsx|ts|tsx)$
         entry: bash -c 'cd admin && npx oxlint --fix --deny-warnings --no-error-on-unmatched-pattern "${@#admin/}"' --
+      # Regenerating the route tree is only needed when a route file changed;
+      # splitting it out keeps it off the common edit-a-component commit.
+      - id: routes-admin
+        name: routes (admin)
+        language: system
+        files: ^admin/src/routes/.*\.(ts|tsx)$
+        pass_filenames: false
+        entry: bash -c 'cd admin && npx tsr generate'
       - id: type-check-admin
         name: type-check (admin)
         language: system
         files: ^admin/.*\.(ts|tsx)$
         pass_filenames: false
-        entry: bash -c 'cd admin && npm run type-check'
+        # The guard covers a fresh clone, where the gitignored tree is absent.
+        entry: bash -c 'cd admin && { [ -f src/routeTree.gen.ts ] || npx tsr generate; } && npx tsc --noEmit'
