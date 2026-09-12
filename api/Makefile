@@ -1,7 +1,7 @@
 .PHONY: run revision upgrade
 
 run:
-	uv run fastapi dev
+	uv run fastapi dev --reload-dir app
 
 migrate:
 	uv run alembic revision --autogenerate
