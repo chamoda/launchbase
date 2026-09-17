@@ -32,12 +32,8 @@ jobs:
         run: npm ci
 
       - name: Build project
+        # VITE_API_URL comes from the committed .env.production.
         run: npm run build
-        env:
-          # Vite inlines this at build time, so it must be set for the build to
-          # succeed. This job is a compile check — point real deploys at the
-          # real API host.
-          VITE_API_URL: http://localhost:8000
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4

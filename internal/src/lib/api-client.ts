@@ -9,7 +9,7 @@ if (!apiUrl) {
   );
 }
 
-const baseURL = `${apiUrl}/platform`;
+const baseURL = `${apiUrl}/internal`;
 
 // Error thrown for non-2xx responses: HTTP `status` and the parsed response
 // `data`. Network failures (no response) surface as the native fetch

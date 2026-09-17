@@ -1,7 +1,9 @@
-# Launchbase Platform
+# Launchbase Internal
 
-The Launchbase frontend — a [TanStack Start](https://tanstack.com/start)
-single-page app.
+The Launchbase internal console — a [TanStack Start](https://tanstack.com/start)
+single-page app. It talks to the API's `/internal` surface (internal-audience
+tokens, `internal_access_token` cookie) and provides user management for
+administrators.
 
 ## Architecture
 
@@ -25,6 +27,7 @@ src/routes/login.tsx           /login          (public)
 src/routes/_main.tsx           auth guard + sidebar chrome (pathless)
 src/routes/_main/index.tsx     /               -> redirects to /dashboard
 src/routes/_main/dashboard.tsx /dashboard
+src/routes/_main/users.tsx     /users
 ```
 
 `_main` is a **pathless layout route**: it does not appear in the URL, but
@@ -41,7 +44,7 @@ Install dependencies and run the development server:
 
 ```bash
 npm install
-make run                                  # http://localhost:3001
+make run                                  # http://localhost:3002
 ```
 
 ## API SDK
@@ -89,7 +92,7 @@ const form = useForm<z.infer<typeof loginSchema>>({
 
 Git hooks for the whole monorepo are managed by
 [pre-commit](https://pre-commit.com) at the repo root — oxfmt, oxlint, and
-`tsc` run automatically on staged `platform/` files before each commit. See the
+`tsc` run automatically on staged `internal/` files before each commit. See the
 [root README](../README.md#git-hooks) for setup.
 
 Linting and formatting use the [oxc](https://oxc.rs) toolchain (same org as
@@ -135,4 +138,4 @@ make build             # -> dist/client/
 
 This template is optimized for deployment on **Cloudflare Pages**. Publish the
 `dist/client/` directory. `public/_redirects` ships the SPA fallback rule that
-serves `_shell.html` for every path, so deep links like `/dashboard` resolve.
+serves `_shell.html` for every path, so deep links like `/users` resolve.

@@ -25,12 +25,11 @@ version from `.nvmrc`.
 
 ```bash
 npm install
-cp .env.example .env.local                      # then edit values (optional)
 make run                                  # http://localhost:3000
 ```
 
 `make run` starts the Vite dev server on port 3000 (the api runs on 8000,
-`platform/` on 3001, `admin/` on 3002).
+`platform/` on 3001, `internal/` on 3002).
 
 ## Routing
 
@@ -82,7 +81,7 @@ Vite and Rolldown) rather than ESLint and Prettier: `oxlint` reads
 plugin dependencies — a full lint of `site/` runs in ~70ms against ESLint's
 ~5s. The oxfmt config was migrated from the old `.prettierrc` and produces
 byte-identical output, so nothing was reformatted in the switch. `platform/`
-and `admin/` use the same toolchain.
+and `internal/` use the same toolchain.
 
 Run the checks manually:
 

@@ -15,7 +15,7 @@ defaults so you can skip the wiring and start building.
 | ----------- | ------------------------------------------------------------------------------ | ----------------------------------------- |
 | `api/`      | FastAPI backend — async SQLAlchemy, Postgres, Alembic, JWT auth, pytest        | [api/README.md](api/README.md)            |
 | `platform/` | TanStack Start frontend — SPA, Tailwind, shadcn/ui                             | [platform/README.md](platform/README.md)  |
-| `admin/`    | TanStack Start admin console — SPA, user management on the API `/admin` surface | [admin/README.md](admin/README.md)        |
+| `internal/` | TanStack Start internal console — SPA, user management on the API `/internal` surface | [internal/README.md](internal/README.md)  |
 | `site/`     | TanStack Start landing page — SSG, API-less, full shadcn/ui component set      | [site/README.md](site/README.md)          |
 
 Each folder's README has the setup and workflow details — start there.

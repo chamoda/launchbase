@@ -35,9 +35,10 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
-!.env.example
+# env files: .env.development and .env.production are committed (public,
+# non-secret build config); local overrides stay out of git
+.env
+.env*.local
 
 # vercel
 .vercel

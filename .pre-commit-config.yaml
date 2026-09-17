@@ -97,28 +97,28 @@ repos:
         pass_filenames: false
         # The guard covers a fresh clone, where the gitignored tree is absent.
         entry: bash -c 'cd site && { [ -f src/routeTree.gen.ts ] || npx tsr generate; } && npx tsc --noEmit'
-      - id: oxfmt-admin
-        name: oxfmt (admin)
+      - id: oxfmt-internal
+        name: oxfmt (internal)
         language: system
-        files: ^admin/.*\.(js|jsx|ts|tsx|json|md|yaml|yml|css|scss|sass)$
-        entry: bash -c 'cd admin && npx oxfmt --no-error-on-unmatched-pattern "${@#admin/}"' --
-      - id: oxlint-admin
-        name: oxlint (admin)
+        files: ^internal/.*\.(js|jsx|ts|tsx|json|md|yaml|yml|css|scss|sass)$
+        entry: bash -c 'cd internal && npx oxfmt --no-error-on-unmatched-pattern "${@#internal/}"' --
+      - id: oxlint-internal
+        name: oxlint (internal)
         language: system
-        files: ^admin/.*\.(js|jsx|ts|tsx)$
-        entry: bash -c 'cd admin && npx oxlint --fix --deny-warnings --no-error-on-unmatched-pattern "${@#admin/}"' --
+        files: ^internal/.*\.(js|jsx|ts|tsx)$
+        entry: bash -c 'cd internal && npx oxlint --fix --deny-warnings --no-error-on-unmatched-pattern "${@#internal/}"' --
       # Regenerating the route tree is only needed when a route file changed;
       # splitting it out keeps it off the common edit-a-component commit.
-      - id: routes-admin
-        name: routes (admin)
+      - id: routes-internal
+        name: routes (internal)
         language: system
-        files: ^admin/src/routes/.*\.(ts|tsx)$
+        files: ^internal/src/routes/.*\.(ts|tsx)$
         pass_filenames: false
-        entry: bash -c 'cd admin && npx tsr generate'
-      - id: type-check-admin
-        name: type-check (admin)
+        entry: bash -c 'cd internal && npx tsr generate'
+      - id: type-check-internal
+        name: type-check (internal)
         language: system
-        files: ^admin/.*\.(ts|tsx)$
+        files: ^internal/.*\.(ts|tsx)$
         pass_filenames: false
         # The guard covers a fresh clone, where the gitignored tree is absent.
-        entry: bash -c 'cd admin && { [ -f src/routeTree.gen.ts ] || npx tsr generate; } && npx tsc --noEmit'
+        entry: bash -c 'cd internal && { [ -f src/routeTree.gen.ts ] || npx tsr generate; } && npx tsc --noEmit'

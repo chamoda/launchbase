@@ -32,7 +32,7 @@ jobs:
           cache-dependency-path: |
             platform/package-lock.json
             site/package-lock.json
-            admin/package-lock.json
+            internal/package-lock.json
 
       - name: Install platform dependencies
         run: npm ci
@@ -42,9 +42,9 @@ jobs:
         run: npm ci
         working-directory: site
 
-      - name: Install admin dependencies
+      - name: Install internal dependencies
         run: npm ci
-        working-directory: admin
+        working-directory: internal
 
       - name: Run pre-commit
         run: uv run --project api pre-commit run --all-files

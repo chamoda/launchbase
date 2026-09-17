@@ -23,9 +23,9 @@ windows:
     panes:
       - make run
       - blank
-  - window_name: admin
+  - window_name: internal
     layout: even-vertical
-    start_directory: ./admin
+    start_directory: ./internal
     panes:
       - make run
       - blank

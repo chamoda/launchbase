@@ -30,8 +30,8 @@ GET /users/self
 # Returns: 200 OK with user details
 # Requires: Authentication
 
-* Admin API                                                            :verb:
-Template http://localhost:8000/admin
+* Internal API                                                            :verb:
+Template http://localhost:8000/internal
 # Access-Token: Bearer TOKEN
 
 ** Health check                                                       :verb:
@@ -54,23 +54,23 @@ Content-Type: application/json
 POST /logout
 # Returns: 200 OK with {"message": "Successfully logged out"}
 
-** Get current admin user
+** Get current internal user
 GET /users/self
-# Returns: 200 OK with admin user details
-# Requires: Admin authentication (403 ADMIN_REQUIRED otherwise)
+# Returns: 200 OK with internal user details
+# Requires: Internal authentication (403 ADMIN_REQUIRED otherwise)
 
 ** List users
 GET /users?limit=50&offset=0
 # Returns: 200 OK with {items, total, limit, offset}
 # Query: limit (1-100, default 50), offset (>=0, default 0)
-# Requires: Admin authentication
+# Requires: Internal authentication
 
 ** Create user
 POST /users
 Content-Type: application/json
 # Returns: 201 Created with the new user
 # Returns: 409 Conflict if the email already exists
-# Requires: Admin authentication
+# Requires: Internal authentication
 
 {
   "first_name": "Jane",
@@ -87,7 +87,7 @@ Content-Type: application/json
 # Returns: 200 OK with the updated user
 # Note: only sent fields change; password is ignored here (use change-password)
 # Returns: 404 if not found, 409 on email conflict
-# Requires: Admin authentication
+# Requires: Internal authentication
 
 {
   "last_name": "Smith",
@@ -98,7 +98,7 @@ Content-Type: application/json
 POST /users/{{(verb-var user-id)}}/change-password
 Content-Type: application/json
 # Returns: 204 No Content
-# Requires: Admin authentication
+# Requires: Internal authentication
 
 {
   "password": "brandnew1"
@@ -108,4 +108,4 @@ Content-Type: application/json
 DELETE /users/{{(verb-var user-id)}}
 # Returns: 204 No Content (row hard-deleted)
 # Returns: 404 if not found
-# Requires: Admin authentication
+# Requires: Internal authentication

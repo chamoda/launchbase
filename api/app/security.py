@@ -8,9 +8,9 @@ from app.config import settings
 
 # JWT audiences scope a token to the surface it was issued for. A token minted
 # for one surface fails audience validation on another, so a platform session
-# cannot be replayed against the admin API (or vice versa) even for an admin.
+# cannot be replayed against the internal API (or vice versa) even for an admin.
 JWT_AUDIENCE_PLATFORM = "platform"
-JWT_AUDIENCE_ADMIN = "admin"
+JWT_AUDIENCE_INTERNAL = "internal"
 
 # Initialize Argon2 password hasher with secure defaults
 ph = PasswordHasher()
