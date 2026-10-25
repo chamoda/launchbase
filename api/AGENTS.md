@@ -13,3 +13,4 @@
 - When you make any changes to APIs make sure to update requests.org file (it's emacs verb plugin file written in org mode)
 - Use MUST use common REST API design guidelines
 - Never session.commit() in services, only session.flush() in service and let router layer commit
+- Name service and router files after the database table they work on (`__tablename__`), e.g. table `users` → `app/services/users.py`, `app/api/*/routers/users.py`, routes under `/users`. Don't invent new words (`accounts`, `members`, `people`, ...) for an existing table; reuse the table name wherever possible
