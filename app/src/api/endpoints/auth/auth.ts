@@ -36,13 +36,39 @@ export const auth = async (
   authRequest: AuthRequest,
   options?: Parameters<typeof customInstance>[1]
 ): Promise<AuthResponse> => {
+  const getHeaders = (
+    h?: NonNullable<RequestInit["headers"]>
+  ): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(
+          h as Iterable<Iterable<string>>,
+          (entry) => Array.from(entry) as [string, string]
+        )
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<
+      string | readonly string[] | undefined
+    >(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
   return customInstance<AuthResponse>(getAuthUrl(), {
     ...options,
     method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
+    headers: {
+      "Content-Type": "application/json",
+      ...getHeaders(options?.headers),
+    },
     body: JSON.stringify(authRequest),
   });
 };
+
+export const getAuthMutationKey = () => ["auth"] as const;
 
 export const getAuthMutationOptions = <
   TError = ErrorType<HTTPValidationError>,
@@ -51,17 +77,17 @@ export const getAuthMutationOptions = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof auth>>,
     TError,
-    { data: BodyType<AuthRequest> },
+    AuthMutationVariables,
     TContext
   >;
   request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof auth>>,
   TError,
-  { data: BodyType<AuthRequest> },
+  AuthMutationVariables,
   TContext
 > => {
-  const mutationKey = ["auth"];
+  const mutationKey = getAuthMutationKey();
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
       "mutationKey" in options.mutation &&
@@ -72,7 +98,7 @@ export const getAuthMutationOptions = <
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof auth>>,
-    { data: BodyType<AuthRequest> }
+    AuthMutationVariables
   > = (props) => {
     const { data } = props ?? {};
 
@@ -85,6 +111,7 @@ export const getAuthMutationOptions = <
 export type AuthMutationResult = NonNullable<Awaited<ReturnType<typeof auth>>>;
 export type AuthMutationBody = BodyType<AuthRequest>;
 export type AuthMutationError = ErrorType<HTTPValidationError>;
+export type AuthMutationVariables = { data: BodyType<AuthRequest> };
 
 /**
  * @summary Auth
@@ -97,7 +124,7 @@ export const useAuth = <
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof auth>>,
       TError,
-      { data: BodyType<AuthRequest> },
+      AuthMutationVariables,
       TContext
     >;
     request?: SecondParameter<typeof customInstance>;
@@ -106,7 +133,7 @@ export const useAuth = <
 ): UseMutationResult<
   Awaited<ReturnType<typeof auth>>,
   TError,
-  { data: BodyType<AuthRequest> },
+  AuthMutationVariables,
   TContext
 > => {
   return useMutation(getAuthMutationOptions(options), queryClient);
@@ -127,6 +154,8 @@ export const logout = async (
   });
 };
 
+export const getLogoutMutationKey = () => ["logout"] as const;
+
 export const getLogoutMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown,
@@ -144,7 +173,7 @@ export const getLogoutMutationOptions = <
   void,
   TContext
 > => {
-  const mutationKey = ["logout"];
+  const mutationKey = getLogoutMutationKey();
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
       "mutationKey" in options.mutation &&

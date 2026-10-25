@@ -11,6 +11,6 @@ import * as zod from "zod";
  * @summary Auth
  */
 export const AuthBody = zod.object({
-  email: zod.string().email(),
+  email: zod.email(),
   password: zod.string(),
 });

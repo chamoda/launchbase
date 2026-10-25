@@ -56,7 +56,7 @@ const makeUserFormSchema = (isEdit: boolean) =>
     email: z
       .string()
       .min(1, "Email is required")
-      .email("Invalid email address"),
+      .pipe(z.email("Invalid email address")),
     password: isEdit
       ? z.string()
       : z

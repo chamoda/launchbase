@@ -379,13 +379,39 @@ export const userCreate = async (
   userCreateRequest: UserCreateRequest,
   options?: Parameters<typeof customInstance>[1]
 ): Promise<InternalUserResponse> => {
+  const getHeaders = (
+    h?: NonNullable<RequestInit["headers"]>
+  ): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(
+          h as Iterable<Iterable<string>>,
+          (entry) => Array.from(entry) as [string, string]
+        )
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<
+      string | readonly string[] | undefined
+    >(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
   return customInstance<InternalUserResponse>(getUserCreateUrl(), {
     ...options,
     method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
+    headers: {
+      "Content-Type": "application/json",
+      ...getHeaders(options?.headers),
+    },
     body: JSON.stringify(userCreateRequest),
   });
 };
+
+export const getUserCreateMutationKey = () => ["userCreate"] as const;
 
 export const getUserCreateMutationOptions = <
   TError = ErrorType<HTTPValidationError>,
@@ -394,17 +420,17 @@ export const getUserCreateMutationOptions = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof userCreate>>,
     TError,
-    { data: BodyType<UserCreateRequest> },
+    UserCreateMutationVariables,
     TContext
   >;
   request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof userCreate>>,
   TError,
-  { data: BodyType<UserCreateRequest> },
+  UserCreateMutationVariables,
   TContext
 > => {
-  const mutationKey = ["userCreate"];
+  const mutationKey = getUserCreateMutationKey();
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
       "mutationKey" in options.mutation &&
@@ -415,7 +441,7 @@ export const getUserCreateMutationOptions = <
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof userCreate>>,
-    { data: BodyType<UserCreateRequest> }
+    UserCreateMutationVariables
   > = (props) => {
     const { data } = props ?? {};
 
@@ -430,6 +456,7 @@ export type UserCreateMutationResult = NonNullable<
 >;
 export type UserCreateMutationBody = BodyType<UserCreateRequest>;
 export type UserCreateMutationError = ErrorType<HTTPValidationError>;
+export type UserCreateMutationVariables = { data: BodyType<UserCreateRequest> };
 
 /**
  * @summary User Create
@@ -442,7 +469,7 @@ export const useUserCreate = <
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof userCreate>>,
       TError,
-      { data: BodyType<UserCreateRequest> },
+      UserCreateMutationVariables,
       TContext
     >;
     request?: SecondParameter<typeof customInstance>;
@@ -451,7 +478,7 @@ export const useUserCreate = <
 ): UseMutationResult<
   Awaited<ReturnType<typeof userCreate>>,
   TError,
-  { data: BodyType<UserCreateRequest> },
+  UserCreateMutationVariables,
   TContext
 > => {
   return useMutation(getUserCreateMutationOptions(options), queryClient);
@@ -468,13 +495,39 @@ export const userUpdate = async (
   userUpdateRequest: UserUpdateRequest,
   options?: Parameters<typeof customInstance>[1]
 ): Promise<InternalUserResponse> => {
+  const getHeaders = (
+    h?: NonNullable<RequestInit["headers"]>
+  ): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(
+          h as Iterable<Iterable<string>>,
+          (entry) => Array.from(entry) as [string, string]
+        )
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<
+      string | readonly string[] | undefined
+    >(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
   return customInstance<InternalUserResponse>(getUserUpdateUrl(userId), {
     ...options,
     method: "PATCH",
-    headers: { "Content-Type": "application/json", ...options?.headers },
+    headers: {
+      "Content-Type": "application/json",
+      ...getHeaders(options?.headers),
+    },
     body: JSON.stringify(userUpdateRequest),
   });
 };
+
+export const getUserUpdateMutationKey = () => ["userUpdate"] as const;
 
 export const getUserUpdateMutationOptions = <
   TError = ErrorType<HTTPValidationError>,
@@ -483,17 +536,17 @@ export const getUserUpdateMutationOptions = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof userUpdate>>,
     TError,
-    { userId: string; data: BodyType<UserUpdateRequest> },
+    UserUpdateMutationVariables,
     TContext
   >;
   request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof userUpdate>>,
   TError,
-  { userId: string; data: BodyType<UserUpdateRequest> },
+  UserUpdateMutationVariables,
   TContext
 > => {
-  const mutationKey = ["userUpdate"];
+  const mutationKey = getUserUpdateMutationKey();
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
       "mutationKey" in options.mutation &&
@@ -504,7 +557,7 @@ export const getUserUpdateMutationOptions = <
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof userUpdate>>,
-    { userId: string; data: BodyType<UserUpdateRequest> }
+    UserUpdateMutationVariables
   > = (props) => {
     const { userId, data } = props ?? {};
 
@@ -519,6 +572,10 @@ export type UserUpdateMutationResult = NonNullable<
 >;
 export type UserUpdateMutationBody = BodyType<UserUpdateRequest>;
 export type UserUpdateMutationError = ErrorType<HTTPValidationError>;
+export type UserUpdateMutationVariables = {
+  userId: string;
+  data: BodyType<UserUpdateRequest>;
+};
 
 /**
  * @summary User Update
@@ -531,7 +588,7 @@ export const useUserUpdate = <
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof userUpdate>>,
       TError,
-      { userId: string; data: BodyType<UserUpdateRequest> },
+      UserUpdateMutationVariables,
       TContext
     >;
     request?: SecondParameter<typeof customInstance>;
@@ -540,7 +597,7 @@ export const useUserUpdate = <
 ): UseMutationResult<
   Awaited<ReturnType<typeof userUpdate>>,
   TError,
-  { userId: string; data: BodyType<UserUpdateRequest> },
+  UserUpdateMutationVariables,
   TContext
 > => {
   return useMutation(getUserUpdateMutationOptions(options), queryClient);
@@ -562,6 +619,8 @@ export const userDelete = async (
   });
 };
 
+export const getUserDeleteMutationKey = () => ["userDelete"] as const;
+
 export const getUserDeleteMutationOptions = <
   TError = ErrorType<HTTPValidationError>,
   TContext = unknown,
@@ -569,17 +628,17 @@ export const getUserDeleteMutationOptions = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof userDelete>>,
     TError,
-    { userId: string },
+    UserDeleteMutationVariables,
     TContext
   >;
   request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof userDelete>>,
   TError,
-  { userId: string },
+  UserDeleteMutationVariables,
   TContext
 > => {
-  const mutationKey = ["userDelete"];
+  const mutationKey = getUserDeleteMutationKey();
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
       "mutationKey" in options.mutation &&
@@ -590,7 +649,7 @@ export const getUserDeleteMutationOptions = <
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof userDelete>>,
-    { userId: string }
+    UserDeleteMutationVariables
   > = (props) => {
     const { userId } = props ?? {};
 
@@ -605,6 +664,7 @@ export type UserDeleteMutationResult = NonNullable<
 >;
 
 export type UserDeleteMutationError = ErrorType<HTTPValidationError>;
+export type UserDeleteMutationVariables = { userId: string };
 
 /**
  * @summary User Delete
@@ -617,7 +677,7 @@ export const useUserDelete = <
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof userDelete>>,
       TError,
-      { userId: string },
+      UserDeleteMutationVariables,
       TContext
     >;
     request?: SecondParameter<typeof customInstance>;
@@ -626,7 +686,7 @@ export const useUserDelete = <
 ): UseMutationResult<
   Awaited<ReturnType<typeof userDelete>>,
   TError,
-  { userId: string },
+  UserDeleteMutationVariables,
   TContext
 > => {
   return useMutation(getUserDeleteMutationOptions(options), queryClient);
@@ -643,13 +703,40 @@ export const userChangePassword = async (
   userChangePasswordRequest: UserChangePasswordRequest,
   options?: Parameters<typeof customInstance>[1]
 ): Promise<void> => {
+  const getHeaders = (
+    h?: NonNullable<RequestInit["headers"]>
+  ): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(
+          h as Iterable<Iterable<string>>,
+          (entry) => Array.from(entry) as [string, string]
+        )
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<
+      string | readonly string[] | undefined
+    >(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
   return customInstance<void>(getUserChangePasswordUrl(userId), {
     ...options,
     method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
+    headers: {
+      "Content-Type": "application/json",
+      ...getHeaders(options?.headers),
+    },
     body: JSON.stringify(userChangePasswordRequest),
   });
 };
+
+export const getUserChangePasswordMutationKey = () =>
+  ["userChangePassword"] as const;
 
 export const getUserChangePasswordMutationOptions = <
   TError = ErrorType<HTTPValidationError>,
@@ -658,17 +745,17 @@ export const getUserChangePasswordMutationOptions = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof userChangePassword>>,
     TError,
-    { userId: string; data: BodyType<UserChangePasswordRequest> },
+    UserChangePasswordMutationVariables,
     TContext
   >;
   request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof userChangePassword>>,
   TError,
-  { userId: string; data: BodyType<UserChangePasswordRequest> },
+  UserChangePasswordMutationVariables,
   TContext
 > => {
-  const mutationKey = ["userChangePassword"];
+  const mutationKey = getUserChangePasswordMutationKey();
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
       "mutationKey" in options.mutation &&
@@ -679,7 +766,7 @@ export const getUserChangePasswordMutationOptions = <
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof userChangePassword>>,
-    { userId: string; data: BodyType<UserChangePasswordRequest> }
+    UserChangePasswordMutationVariables
   > = (props) => {
     const { userId, data } = props ?? {};
 
@@ -695,6 +782,10 @@ export type UserChangePasswordMutationResult = NonNullable<
 export type UserChangePasswordMutationBody =
   BodyType<UserChangePasswordRequest>;
 export type UserChangePasswordMutationError = ErrorType<HTTPValidationError>;
+export type UserChangePasswordMutationVariables = {
+  userId: string;
+  data: BodyType<UserChangePasswordRequest>;
+};
 
 /**
  * @summary User Change Password
@@ -707,7 +798,7 @@ export const useUserChangePassword = <
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof userChangePassword>>,
       TError,
-      { userId: string; data: BodyType<UserChangePasswordRequest> },
+      UserChangePasswordMutationVariables,
       TContext
     >;
     request?: SecondParameter<typeof customInstance>;
@@ -716,7 +807,7 @@ export const useUserChangePassword = <
 ): UseMutationResult<
   Awaited<ReturnType<typeof userChangePassword>>,
   TError,
-  { userId: string; data: BodyType<UserChangePasswordRequest> },
+  UserChangePasswordMutationVariables,
   TContext
 > => {
   return useMutation(

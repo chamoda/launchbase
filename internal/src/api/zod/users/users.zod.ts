@@ -18,14 +18,12 @@ export const userListQueryOffsetMin = 0;
 
 export const UserListQueryParams = zod.object({
   limit: zod
-    .number()
     .int()
     .min(1)
     .max(userListQueryLimitMax)
     .default(userListQueryLimitDefault)
     .describe("Page size limit"),
   offset: zod
-    .number()
     .int()
     .min(userListQueryOffsetMin)
     .default(userListQueryOffsetDefault)
@@ -47,7 +45,7 @@ export const userCreateBodyIsActiveDefault = true;
 export const UserCreateBody = zod.object({
   first_name: zod.string().min(1).max(userCreateBodyFirstNameMax),
   last_name: zod.string().min(1).max(userCreateBodyLastNameMax),
-  email: zod.string().email(),
+  email: zod.email(),
   password: zod.string().min(userCreateBodyPasswordMin),
   is_admin: zod.boolean().default(userCreateBodyIsAdminDefault),
   is_active: zod.boolean().default(userCreateBodyIsActiveDefault),
@@ -57,7 +55,7 @@ export const UserCreateBody = zod.object({
  * @summary User Update
  */
 export const UserUpdateParams = zod.object({
-  user_id: zod.string().uuid(),
+  user_id: zod.uuid(),
 });
 
 export const userUpdateBodyFirstNameOneMax = 100;
@@ -71,7 +69,7 @@ export const UserUpdateBody = zod.object({
   last_name: zod
     .union([zod.string().min(1).max(userUpdateBodyLastNameOneMax), zod.null()])
     .optional(),
-  email: zod.union([zod.string().email(), zod.null()]).optional(),
+  email: zod.union([zod.email(), zod.null()]).optional(),
   is_admin: zod.union([zod.boolean(), zod.null()]).optional(),
   is_active: zod.union([zod.boolean(), zod.null()]).optional(),
 });
@@ -80,14 +78,14 @@ export const UserUpdateBody = zod.object({
  * @summary User Delete
  */
 export const UserDeleteParams = zod.object({
-  user_id: zod.string().uuid(),
+  user_id: zod.uuid(),
 });
 
 /**
  * @summary User Change Password
  */
 export const UserChangePasswordParams = zod.object({
-  user_id: zod.string().uuid(),
+  user_id: zod.uuid(),
 });
 
 export const userChangePasswordBodyPasswordMin = 8;
