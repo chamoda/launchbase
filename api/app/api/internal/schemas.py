@@ -25,13 +25,6 @@ class InternalUserResponse(Model):
     is_active: bool
 
 
-class UsersListResponse(Model):
-    items: list[InternalUserResponse]
-    total: int
-    limit: int
-    offset: int
-
-
 class UserCreateRequest(Model):
     first_name: str = Field(min_length=1, max_length=100)
     last_name: str = Field(min_length=1, max_length=100)

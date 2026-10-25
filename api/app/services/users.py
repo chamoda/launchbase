@@ -1,8 +1,7 @@
 import uuid
-from collections.abc import Sequence
 from typing import Any
 
-from sqlalchemy import func, select
+from sqlalchemy import Select, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.exceptions import ConflictException, ResourceNotFoundException
@@ -20,24 +19,13 @@ class UserService:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def list_users(
-        self,
-        *,
-        limit: int = 50,
-        offset: int = 0,
-    ) -> tuple[Sequence[User], int]:
-        """Return a page of users, newest first.
+    def list_users_query(self) -> Select[tuple[User]]:
+        """Return the query for listing users, newest first.
 
-        Returns the page of users together with the total matching count so
-        callers can render pagination controls without a second query
-        round-trip on the caller side.
+        Pagination is an HTTP concern, so the router pages this query (and
+        counts the total) with fastapi-pagination rather than the service.
         """
-        total = await self.session.scalar(select(func.count()).select_from(User))
-
-        result = await self.session.execute(
-            select(User).order_by(User.created_at.desc()).limit(limit).offset(offset)
-        )
-        return result.scalars().all(), total or 0
+        return select(User).order_by(User.created_at.desc(), User.id.desc())
 
     async def get_user(self, user_id: uuid.UUID) -> User:
         """Return a single user or raise 404."""

@@ -61,8 +61,10 @@ GET /users/self
 
 ** List users
 GET /users?limit=50&offset=0
-# Returns: 200 OK with {items, total, limit, offset}
+# Returns: 200 OK with {items, total, limit, offset} (fastapi-pagination LimitOffsetPage)
 # Query: limit (1-100, default 50), offset (>=0, default 0)
+# Returns: 422 if limit/offset are out of range
+# Order: newest first (created_at desc, id desc)
 # Requires: Internal authentication
 
 ** Create user

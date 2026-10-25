@@ -4,6 +4,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.routing import APIRoute
 from fastapi.staticfiles import StaticFiles
+from fastapi_pagination import add_pagination
 
 from app.api.app.router import router as app_router
 from app.api.internal.router import router as internal_router
@@ -54,6 +55,7 @@ async def api_exception_handler(request: Request, exc: APIException):
 
 
 app_api.include_router(app_router)
+add_pagination(app_api)
 app_api.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins_list,
@@ -85,6 +87,7 @@ async def internal_api_exception_handler(request: Request, exc: APIException):
 
 
 internal_api.include_router(internal_router)
+add_pagination(internal_api)
 internal_api.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins_list,

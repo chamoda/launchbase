@@ -17,6 +17,7 @@ dependencies = [
     "typer>=0.24.2",
     "asyncpg>=0.31.0",
     "pyjwt>=2.13.0",
+    "fastapi-pagination>=0.15.15,<0.15.16",
 ]
 
 [tool.pytest.ini_options]

@@ -1,13 +1,14 @@
 import uuid
 
-from fastapi import APIRouter, Query, status
+from fastapi import APIRouter, status
+from fastapi_pagination import LimitOffsetPage
+from fastapi_pagination.ext.sqlalchemy import apaginate
 
 from app.api.internal.access import CurrentInternalUser
 from app.api.internal.schemas import (
     InternalUserResponse,
     UserChangePasswordRequest,
     UserCreateRequest,
-    UsersListResponse,
     UserUpdateRequest,
 )
 from app.database import DBSession
@@ -27,16 +28,8 @@ async def get_current_internal_user(
 async def user_list(
     current_user: CurrentInternalUser,
     session: DBSession,
-    limit: int = Query(50, ge=1, le=100),
-    offset: int = Query(0, ge=0),
-) -> UsersListResponse:
-    users, total = await UserService(session).list_users(limit=limit, offset=offset)
-    return UsersListResponse(
-        items=[InternalUserResponse.model_validate(u) for u in users],
-        total=total,
-        limit=limit,
-        offset=offset,
-    )
+) -> LimitOffsetPage[InternalUserResponse]:
+    return await apaginate(session, UserService(session).list_users_query())
 
 
 @router.post("/users", status_code=status.HTTP_201_CREATED, tags=["users"])

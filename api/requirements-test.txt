@@ -71,11 +71,15 @@ email-validator==2.3.0
     #   pydantic
 faker==40.19.1
 fastapi==0.136.3
-    # via app
+    # via
+    #   app
+    #   fastapi-pagination
 fastapi-cli==0.0.24
     # via fastapi
 fastapi-cloud-cli==0.18.0
     # via fastapi-cli
+fastapi-pagination==0.15.15
+    # via app
 fastar==0.11.0
     # via
     #   fastapi
@@ -155,6 +159,7 @@ pydantic==2.13.4
     #   app
     #   fastapi
     #   fastapi-cloud-cli
+    #   fastapi-pagination
     #   pydantic-extra-types
     #   pydantic-settings
     #   pyinfra
@@ -239,6 +244,7 @@ typing-extensions==4.15.0
     #   alembic
     #   anyio
     #   fastapi
+    #   fastapi-pagination
     #   pydantic
     #   pydantic-core
     #   pydantic-extra-types
