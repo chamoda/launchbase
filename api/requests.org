@@ -15,6 +15,7 @@ GET /health
 POST /auth
 Content-Type: application/json
 # Returns: 200 OK with access token
+# Returns: 401 INVALID_CREDENTIALS for wrong credentials or an inactive account
 
 {
   "email": "user@example.com",
@@ -28,6 +29,7 @@ POST /logout
 ** Get current user
 GET /users/self
 # Returns: 200 OK with user details
+# Returns: 401 if the account is inactive or the token predates a password change
 # Requires: Authentication
 
 * Internal API                                                            :verb:
@@ -43,7 +45,7 @@ GET /health
 POST /auth
 Content-Type: application/json
 # Returns: 200 OK with access token
-# Note: only users with is_admin may authenticate here
+# Note: only active users with is_admin may authenticate here
 
 {
   "email": "admin@example.com",
@@ -89,6 +91,7 @@ Content-Type: application/json
 # Returns: 200 OK with the updated user
 # Note: only sent fields change; password is ignored here (use change-password)
 # Returns: 404 if not found, 409 on email conflict
+# Returns: 400 if you set is_admin or is_active to false on your own account
 # Requires: Internal authentication
 
 {
@@ -100,6 +103,7 @@ Content-Type: application/json
 POST /users/{{(verb-var user-id)}}/change-password
 Content-Type: application/json
 # Returns: 204 No Content
+# Note: signs the user out everywhere (tokens issued before this are revoked)
 # Requires: Internal authentication
 
 {
@@ -109,5 +113,5 @@ Content-Type: application/json
 ** Delete user
 DELETE /users/{{(verb-var user-id)}}
 # Returns: 204 No Content (row hard-deleted)
-# Returns: 404 if not found
+# Returns: 404 if not found, 400 if deleting your own account
 # Requires: Internal authentication

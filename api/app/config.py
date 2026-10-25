@@ -23,9 +23,6 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24  # 24 hours
     JWT_ALGORITHM: str = "HS256"
 
-    # Cloudflare API token for SSL certificates
-    CLOUDFLARE_API_TOKEN: str | None = None
-
     @field_validator("SECRET_KEY")
     @classmethod
     def validate_secret_key(cls, v):

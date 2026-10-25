@@ -87,9 +87,7 @@ async def test_users_me_nonexistent_user(async_client):
 
 @pytest.mark.asyncio
 async def test_users_me_inactive_user(async_client, session_factory):
-    """Test getting current user information for inactive user."""
-    # Note: The endpoint doesn't currently check is_active status
-    # This test verifies current behavior - inactive users can still access their info
+    """An inactive user's otherwise valid token is rejected."""
     email = fake.email().lower()
     password = "testpassword123"
 
@@ -112,8 +110,5 @@ async def test_users_me_inactive_user(async_client, session_factory):
     async_client.cookies.set("access_token", f"Bearer {access_token}")
     response = await async_client.get("/app/users/self")
 
-    # Currently, the endpoint allows inactive users to access their info
-    assert response.status_code == 200
-    data = response.json()
-    assert data["id"] == str(user_id)
-    assert data["email"] == email
+    assert response.status_code == 401
+    assert response.json()["detail"][0]["type"] == "invalid_token"

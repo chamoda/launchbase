@@ -6,6 +6,7 @@ from datetime import UTC, datetime
 from sqlalchemy import (
     Boolean,
     DateTime,
+    Integer,
     String,
     types,
 )
@@ -44,3 +45,6 @@ class User(IdMixin, TimestampMixin, Base):
     password: Mapped[str | None] = mapped_column(String(128), nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     is_admin: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    # Embedded in issued JWTs as `ver`; bumping it (e.g. on password change)
+    # invalidates every token issued before.
+    token_version: Mapped[int] = mapped_column(Integer, nullable=False, default=0)

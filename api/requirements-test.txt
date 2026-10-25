@@ -12,6 +12,7 @@ annotated-types==0.7.0
 anyio==4.13.0
     # via
     #   httpx
+    #   httpx2
     #   starlette
     #   watchfiles
 argon2-cffi==25.1.0
@@ -70,15 +71,15 @@ email-validator==2.3.0
     #   fastapi
     #   pydantic
 faker==40.19.1
-fastapi==0.136.3
+fastapi==0.162.0
     # via
     #   app
     #   fastapi-pagination
-fastapi-cli==0.0.24
+fastapi-cli==0.0.32
     # via fastapi
 fastapi-cloud-cli==0.18.0
     # via fastapi-cli
-fastapi-pagination==0.15.15
+fastapi-pagination==0.16.1
     # via app
 fastar==0.11.0
     # via
@@ -90,6 +91,8 @@ filelock==3.29.0
     #   virtualenv
 gevent==26.5.0
     # via pyinfra
+googleapis-common-protos==1.76.0
+    # via opentelemetry-exporter-otlp-proto-http
 greenlet==3.5.1
     # via
     #   gevent
@@ -97,22 +100,30 @@ greenlet==3.5.1
 h11==0.16.0
     # via
     #   httpcore
+    #   httpcore2
     #   uvicorn
 httpcore==1.0.9
     # via httpx
+httpcore2==2.16.0 ; sys_platform != 'emscripten'
+    # via httpx2
 httptools==0.7.1
     # via uvicorn
 httpx==0.28.1
     # via
     #   fastapi
     #   fastapi-cloud-cli
+httpx2==2.16.0
+    # via fastapi
+httpx2-jsfetch==1.0 ; sys_platform == 'emscripten'
+    # via httpx2
 identify==2.6.19
     # via pre-commit
-idna==3.16
+idna==3.20
     # via
     #   anyio
     #   email-validator
     #   httpx
+    #   httpx2
     #   requests
 iniconfig==2.3.0
     # via pytest
@@ -136,6 +147,32 @@ nodeenv==1.10.0
     # via
     #   pre-commit
     #   pyright
+opentelemetry-api==1.45.1
+    # via
+    #   fastapi
+    #   opentelemetry-exporter-http-transport
+    #   opentelemetry-exporter-otlp-proto-http
+    #   opentelemetry-sdk
+    #   opentelemetry-semantic-conventions
+opentelemetry-exporter-http-transport==0.66b1
+    # via opentelemetry-exporter-otlp-proto-http
+opentelemetry-exporter-otlp-common==0.66b1
+    # via opentelemetry-exporter-otlp-proto-http
+opentelemetry-exporter-otlp-proto-common==1.45.1
+    # via opentelemetry-exporter-otlp-proto-http
+opentelemetry-exporter-otlp-proto-http==1.45.1
+    # via fastapi
+opentelemetry-proto==1.45.1
+    # via
+    #   opentelemetry-exporter-otlp-proto-common
+    #   opentelemetry-exporter-otlp-proto-http
+opentelemetry-sdk==1.45.1
+    # via
+    #   fastapi
+    #   opentelemetry-exporter-otlp-common
+    #   opentelemetry-exporter-otlp-proto-http
+opentelemetry-semantic-conventions==0.66b1
+    # via opentelemetry-sdk
 packaging==26.2
     # via
     #   pyinfra
@@ -151,6 +188,10 @@ pluggy==1.6.0
     #   pytest
     #   pytest-cov
 pre-commit==4.6.0
+protobuf==7.36.2
+    # via
+    #   googleapis-common-protos
+    #   opentelemetry-proto
 psycopg2-binary==2.9.12
 pycparser==3.0 ; implementation_name != 'PyPy'
     # via cffi
@@ -205,7 +246,10 @@ pyyaml==6.0.3
     #   pre-commit
     #   uvicorn
 requests==2.34.2
-    # via docker
+    # via
+    #   docker
+    #   opentelemetry-exporter-http-transport
+    #   opentelemetry-exporter-otlp-proto-http
 rich==15.0.0
     # via
     #   rich-toolkit
@@ -230,6 +274,10 @@ sqlalchemy==2.0.50
 starlette==1.1.0
     # via fastapi
 testcontainers==4.14.2
+truststore==0.10.5 ; sys_platform != 'emscripten'
+    # via
+    #   httpcore2
+    #   httpx2
 typeguard==4.5.2
     # via pyinfra
 typer==0.25.1
@@ -245,6 +293,11 @@ typing-extensions==4.15.0
     #   anyio
     #   fastapi
     #   fastapi-pagination
+    #   httpx2
+    #   opentelemetry-api
+    #   opentelemetry-exporter-otlp-proto-http
+    #   opentelemetry-sdk
+    #   opentelemetry-semantic-conventions
     #   pydantic
     #   pydantic-core
     #   pydantic-extra-types

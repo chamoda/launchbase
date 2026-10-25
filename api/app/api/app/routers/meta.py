@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Response, status
-from sqlalchemy import select, text
+from sqlalchemy import text
 
 from app.api.app.schemas import (
     AuthRequest,
@@ -9,13 +9,9 @@ from app.config import settings
 from app.database import DBSession
 from app.exceptions import APIException
 from app.logging import logger
-from app.models import User
 from app.schemas import HealthCheckResponse, MessageResponse
-from app.security import (
-    JWT_AUDIENCE_APP,
-    generate_jwt_token,
-    verify_password,
-)
+from app.security import JWT_AUDIENCE_APP, generate_jwt_token
+from app.services.users import UserService
 
 router = APIRouter()
 
@@ -38,20 +34,14 @@ async def health(session: DBSession, response: Response) -> HealthCheckResponse:
 async def auth(
     auth_request: AuthRequest, session: DBSession, response: Response
 ) -> AuthResponse:
-    result = await session.execute(
-        select(User).where(
-            User.email == auth_request.email.lower(),
-        )
+    user = await UserService(session).authenticate(
+        auth_request.email, auth_request.password
     )
-    user = result.scalars().first()
 
-    if (
-        user
-        and user.password is not None
-        and verify_password(auth_request.password, user.password)
-    ):
+    if user:
         access_token = generate_jwt_token(
-            {"sub": str(user.id)}, audience=JWT_AUDIENCE_APP
+            {"sub": str(user.id), "ver": user.token_version},
+            audience=JWT_AUDIENCE_APP,
         )
         response.set_cookie(
             key="access_token",

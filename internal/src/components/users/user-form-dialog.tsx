@@ -6,6 +6,16 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useUserCreate, useUserUpdate } from "@/api/endpoints/users/users";
 import type { InternalUserResponse } from "@/api/model";
+import {
+  userCreateBodyFirstNameMax,
+  userCreateBodyIsActiveDefault,
+  userCreateBodyIsAdminDefault,
+  userCreateBodyLastNameMax,
+  userCreateBodyPasswordMin,
+  userUpdateBodyFirstNameOneMax,
+  userUpdateBodyLastNameOneMax,
+} from "@/api/zod/users/users.zod";
+import { useCurrentUser } from "@/contexts/user-context";
 import { applyApiErrorToForm } from "@/lib/api-error";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,14 +38,21 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-// Shared create/edit schema. Password is only used in create mode, where it is
-// required (min 8 chars). In edit mode the field is not rendered and its value
-// is ignored — passwords are changed elsewhere — so validation is relaxed to
-// keep the edit form submittable.
+// Shared create/edit schema. Limits come from the generated API constants so
+// they track the backend; the messages stay here. Password is only used in
+// create mode, where it is required. In edit mode the field is not rendered
+// and its value is ignored — passwords are changed elsewhere — so validation
+// is relaxed to keep the edit form submittable.
 const makeUserFormSchema = (isEdit: boolean) =>
   z.object({
-    first_name: z.string().min(1, "First name is required").max(100),
-    last_name: z.string().min(1, "Last name is required").max(100),
+    first_name: z
+      .string()
+      .min(1, "First name is required")
+      .max(isEdit ? userUpdateBodyFirstNameOneMax : userCreateBodyFirstNameMax),
+    last_name: z
+      .string()
+      .min(1, "Last name is required")
+      .max(isEdit ? userUpdateBodyLastNameOneMax : userCreateBodyLastNameMax),
     email: z
       .string()
       .min(1, "Email is required")
@@ -45,7 +62,10 @@ const makeUserFormSchema = (isEdit: boolean) =>
       : z
           .string()
           .min(1, "Password is required")
-          .min(8, "Password must be at least 8 characters"),
+          .min(
+            userCreateBodyPasswordMin,
+            `Password must be at least ${userCreateBodyPasswordMin} characters`
+          ),
     is_admin: z.boolean(),
     is_active: z.boolean(),
   });
@@ -57,8 +77,8 @@ const emptyValues: UserFormData = {
   last_name: "",
   email: "",
   password: "",
-  is_admin: false,
-  is_active: true,
+  is_admin: userCreateBodyIsAdminDefault,
+  is_active: userCreateBodyIsActiveDefault,
 };
 
 interface UserFormDialogProps {
@@ -75,7 +95,11 @@ export function UserFormDialog({
   onOpenChange,
 }: UserFormDialogProps) {
   const queryClient = useQueryClient();
+  const currentUser = useCurrentUser();
   const isEdit = mode === "edit";
+  // The API refuses to let you demote or deactivate yourself, so lock those
+  // switches rather than let the save fail.
+  const isSelf = isEdit && currentUser?.id === user?.id;
 
   const form = useForm<UserFormData>({
     resolver: zodResolver(makeUserFormSchema(isEdit)),
@@ -261,13 +285,16 @@ export function UserFormDialog({
                   <div className="space-y-0.5">
                     <FormLabel>Administrator</FormLabel>
                     <FormDescription>
-                      Can sign in to this internal console.
+                      {isSelf
+                        ? "You can't remove your own admin access."
+                        : "Can sign in to this internal console."}
                     </FormDescription>
                   </div>
                   <FormControl>
                     <Switch
                       checked={field.value}
                       onCheckedChange={field.onChange}
+                      disabled={isSelf}
                     />
                   </FormControl>
                 </FormItem>
@@ -282,13 +309,16 @@ export function UserFormDialog({
                   <div className="space-y-0.5">
                     <FormLabel>Active</FormLabel>
                     <FormDescription>
-                      Inactive users cannot use their account.
+                      {isSelf
+                        ? "You can't deactivate your own account."
+                        : "Inactive users cannot use their account."}
                     </FormDescription>
                   </div>
                   <FormControl>
                     <Switch
                       checked={field.value}
                       onCheckedChange={field.onChange}
+                      disabled={isSelf}
                     />
                   </FormControl>
                 </FormItem>

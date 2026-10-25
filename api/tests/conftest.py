@@ -1,11 +1,16 @@
 import asyncio
 import logging
+import os
 import warnings
 
 import pytest
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from testcontainers.postgres import PostgresContainer
+
+# Pin a test-only signing key before app settings load, overriding any short
+# dev key from .env (PyJWT warns on HMAC keys under 32 bytes).
+os.environ["SECRET_KEY"] = "test-secret-key-for-pytest-only-not-for-production"
 
 from app.database import Base, get_db
 

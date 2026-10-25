@@ -5,6 +5,7 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { useUserChangePassword } from "@/api/endpoints/users/users";
 import type { InternalUserResponse } from "@/api/model";
+import { userChangePasswordBodyPasswordMin } from "@/api/zod/users/users.zod";
 import { getApiErrorMessage } from "@/lib/api-error";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,7 +27,12 @@ import {
 } from "@/components/ui/form";
 
 const schema = z.object({
-  password: z.string().min(8, "Password must be at least 8 characters"),
+  password: z
+    .string()
+    .min(
+      userChangePasswordBodyPasswordMin,
+      `Password must be at least ${userChangePasswordBodyPasswordMin} characters`
+    ),
 });
 
 type FormData = z.infer<typeof schema>;

@@ -1,18 +1,14 @@
 from fastapi import APIRouter, Response, status
-from sqlalchemy import select, text
+from sqlalchemy import text
 
 from app.api.internal.schemas import AuthRequest, AuthResponse
 from app.config import settings
 from app.database import DBSession
 from app.exceptions import APIException
 from app.logging import logger
-from app.models import User
 from app.schemas import HealthCheckResponse, MessageResponse
-from app.security import (
-    JWT_AUDIENCE_INTERNAL,
-    generate_jwt_token,
-    verify_password,
-)
+from app.security import JWT_AUDIENCE_INTERNAL, generate_jwt_token
+from app.services.users import UserService
 
 # Internal sessions use a dedicated cookie so an admin can hold app and
 # internal sessions at once without one overwriting the other.
@@ -39,23 +35,16 @@ async def health(session: DBSession, response: Response) -> HealthCheckResponse:
 async def auth(
     auth_request: AuthRequest, session: DBSession, response: Response
 ) -> AuthResponse:
-    result = await session.execute(
-        select(User).where(
-            User.email == auth_request.email.lower(),
-        )
+    user = await UserService(session).authenticate(
+        auth_request.email, auth_request.password
     )
-    user = result.scalars().first()
 
     # Only admins may authenticate against the internal surface. Non-admins get the
     # same generic error as bad credentials so account state isn't disclosed.
-    if (
-        user
-        and user.is_admin
-        and user.password is not None
-        and verify_password(auth_request.password, user.password)
-    ):
+    if user and user.is_admin:
         access_token = generate_jwt_token(
-            {"sub": str(user.id)}, audience=JWT_AUDIENCE_INTERNAL
+            {"sub": str(user.id), "ver": user.token_version},
+            audience=JWT_AUDIENCE_INTERNAL,
         )
         response.set_cookie(
             key=INTERNAL_COOKIE_NAME,

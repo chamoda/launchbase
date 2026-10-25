@@ -24,7 +24,7 @@ export default defineConfig({
       },
     },
   },
-  // Standalone zod schemas (request/response/params), composable for react-hook-form.
+  // Standalone zod schemas (request/params), composable for react-hook-form.
   launchbaseZod: {
     input: "http://localhost:8000/internal/openapi.json",
     output: {

@@ -14,14 +14,3 @@ export const AuthBody = zod.object({
   email: zod.string().email(),
   password: zod.string(),
 });
-
-export const AuthResponse = zod.object({
-  access_token: zod.string(),
-});
-
-/**
- * @summary Logout
- */
-export const LogoutResponse = zod.object({
-  message: zod.string(),
-});

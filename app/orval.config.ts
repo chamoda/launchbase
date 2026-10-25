@@ -24,7 +24,7 @@ export default defineConfig({
       },
     },
   },
-  // Standalone zod schemas (request/response/params), composable for react-hook-form.
+  // Standalone zod schemas (request/params), composable for react-hook-form.
   launchbaseZod: {
     input: "http://localhost:8000/app/openapi.json",
     output: {
@@ -33,6 +33,19 @@ export default defineConfig({
       fileExtension: ".zod.ts",
       client: "zod",
       clean: true,
+      override: {
+        zod: {
+          // Response types come from the TS models above and responses aren't
+          // validated at runtime, so response schemas would only add dead code.
+          generate: {
+            param: true,
+            query: true,
+            header: true,
+            body: true,
+            response: false,
+          },
+        },
+      },
     },
   },
 });

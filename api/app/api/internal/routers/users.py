@@ -51,7 +51,7 @@ async def user_update(
     data: UserUpdateRequest,
 ) -> InternalUserResponse:
     user = await UserService(session).update_user(
-        user_id, data.model_dump(exclude_unset=True)
+        user_id, data.model_dump(exclude_unset=True), actor_id=current_user.id
     )
     await session.commit()
     return InternalUserResponse.model_validate(user)
@@ -80,5 +80,5 @@ async def user_delete(
     session: DBSession,
     user_id: uuid.UUID,
 ) -> None:
-    await UserService(session).delete_user(user_id)
+    await UserService(session).delete_user(user_id, actor_id=current_user.id)
     await session.commit()

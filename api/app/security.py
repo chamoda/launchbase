@@ -15,6 +15,11 @@ JWT_AUDIENCE_INTERNAL = "internal"
 # Initialize Argon2 password hasher with secure defaults
 ph = PasswordHasher()
 
+# Verified against when a login email has no usable password, so an unknown
+# email costs the same Argon2 work as a wrong password and response timing
+# doesn't reveal which emails have accounts.
+DUMMY_PASSWORD_HASH = ph.hash("dummy-password-for-timing")
+
 
 def hash_password(password: str) -> str:
     """Hash a password using Argon2."""
