@@ -8,20 +8,6 @@
 import * as zod from "zod";
 
 /**
- * @summary Get Current Internal User
- */
-export const GetCurrentInternalUserResponse = zod.object({
-  id: zod.string(),
-  created_at: zod.string().datetime({ offset: true }),
-  updated_at: zod.union([zod.string().datetime({ offset: true }), zod.null()]),
-  first_name: zod.string(),
-  last_name: zod.string(),
-  email: zod.string(),
-  is_admin: zod.boolean(),
-  is_active: zod.boolean(),
-});
-
-/**
  * @summary User List
  */
 export const userListQueryLimitDefault = 50;
@@ -36,33 +22,14 @@ export const UserListQueryParams = zod.object({
     .int()
     .min(1)
     .max(userListQueryLimitMax)
-    .default(userListQueryLimitDefault),
+    .default(userListQueryLimitDefault)
+    .describe("Page size limit"),
   offset: zod
     .number()
     .int()
     .min(userListQueryOffsetMin)
-    .default(userListQueryOffsetDefault),
-});
-
-export const UserListResponse = zod.object({
-  items: zod.array(
-    zod.object({
-      id: zod.string(),
-      created_at: zod.string().datetime({ offset: true }),
-      updated_at: zod.union([
-        zod.string().datetime({ offset: true }),
-        zod.null(),
-      ]),
-      first_name: zod.string(),
-      last_name: zod.string(),
-      email: zod.string(),
-      is_admin: zod.boolean(),
-      is_active: zod.boolean(),
-    })
-  ),
-  total: zod.number().int(),
-  limit: zod.number().int(),
-  offset: zod.number().int(),
+    .default(userListQueryOffsetDefault)
+    .describe("Page offset"),
 });
 
 /**
@@ -84,17 +51,6 @@ export const UserCreateBody = zod.object({
   password: zod.string().min(userCreateBodyPasswordMin),
   is_admin: zod.boolean().default(userCreateBodyIsAdminDefault),
   is_active: zod.boolean().default(userCreateBodyIsActiveDefault),
-});
-
-export const UserCreateResponse = zod.object({
-  id: zod.string(),
-  created_at: zod.string().datetime({ offset: true }),
-  updated_at: zod.union([zod.string().datetime({ offset: true }), zod.null()]),
-  first_name: zod.string(),
-  last_name: zod.string(),
-  email: zod.string(),
-  is_admin: zod.boolean(),
-  is_active: zod.boolean(),
 });
 
 /**
@@ -120,25 +76,12 @@ export const UserUpdateBody = zod.object({
   is_active: zod.union([zod.boolean(), zod.null()]).optional(),
 });
 
-export const UserUpdateResponse = zod.object({
-  id: zod.string(),
-  created_at: zod.string().datetime({ offset: true }),
-  updated_at: zod.union([zod.string().datetime({ offset: true }), zod.null()]),
-  first_name: zod.string(),
-  last_name: zod.string(),
-  email: zod.string(),
-  is_admin: zod.boolean(),
-  is_active: zod.boolean(),
-});
-
 /**
  * @summary User Delete
  */
 export const UserDeleteParams = zod.object({
   user_id: zod.string().uuid(),
 });
-
-export const UserDeleteResponse = zod.void();
 
 /**
  * @summary User Change Password
@@ -152,5 +95,3 @@ export const userChangePasswordBodyPasswordMin = 8;
 export const UserChangePasswordBody = zod.object({
   password: zod.string().min(userChangePasswordBodyPasswordMin),
 });
-
-export const UserChangePasswordResponse = zod.void();

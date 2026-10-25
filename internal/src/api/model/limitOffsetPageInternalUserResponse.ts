@@ -7,9 +7,12 @@
  */
 import type { InternalUserResponse } from "./internalUserResponse";
 
-export interface UsersListResponse {
+export interface LimitOffsetPageInternalUserResponse {
   items: InternalUserResponse[];
+  /** @minimum 0 */
   total: number;
+  /** @minimum 1 */
   limit: number;
+  /** @minimum 0 */
   offset: number;
 }

@@ -8,11 +8,13 @@
 
 export type UserListParams = {
   /**
+   * Page size limit
    * @minimum 1
    * @maximum 100
    */
   limit?: number;
   /**
+   * Page offset
    * @minimum 0
    */
   offset?: number;

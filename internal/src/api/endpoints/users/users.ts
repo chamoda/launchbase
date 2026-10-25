@@ -24,11 +24,11 @@ import type {
 import type {
   HTTPValidationError,
   InternalUserResponse,
+  LimitOffsetPageInternalUserResponse,
   UserChangePasswordRequest,
   UserCreateRequest,
   UserListParams,
   UserUpdateRequest,
-  UsersListResponse,
 } from "../../model";
 
 import { customInstance } from "../../../lib/api-client";
@@ -232,11 +232,14 @@ export const getUserListUrl = (params?: UserListParams) => {
 export const userList = async (
   params?: UserListParams,
   options?: Parameters<typeof customInstance>[1]
-): Promise<UsersListResponse> => {
-  return customInstance<UsersListResponse>(getUserListUrl(params), {
-    ...options,
-    method: "GET",
-  });
+): Promise<LimitOffsetPageInternalUserResponse> => {
+  return customInstance<LimitOffsetPageInternalUserResponse>(
+    getUserListUrl(params),
+    {
+      ...options,
+      method: "GET",
+    }
+  );
 };
 
 export const getUserListQueryKey = (params?: UserListParams) => {
